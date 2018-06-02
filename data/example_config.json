@@ -1,0 +1,21 @@
+{
+    "prefix": "n!",
+    "token": "Super Secret Bot Token",
+
+    "owners": [
+        "Your ID here"
+    ],
+
+    "apis": {
+        "weeb_sh": "Super Secret"
+    },
+
+    "database": {
+        "connectionLimit": "25",
+        "host": "",
+        "user": "",
+        "pass": "",
+        "db": "",
+        "charset": "utf8mb4"
+    }
+}
