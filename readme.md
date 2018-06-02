@@ -1,4 +1,4 @@
-# Kawaii Bot
+# Kawaii Bot 🎀
 
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 [![made-with-node](https://img.shields.io/badge/written%20in-Node%20JS-008e00.svg)](https://nodejs.org/en/)
