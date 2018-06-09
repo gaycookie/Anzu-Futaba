@@ -4,7 +4,7 @@ const config    = require('./data/config.json');
 const PrefixManager = require('./prefixManager.js');
 const { hearts, sad, status } = require('./constants.js');
 const prefix    = new PrefixManager('./data/prefix.json', config.prefix);
-const client    = new Discord.Client();
+const client    = new Discord.Client({autoReconnect:true});
 const cooldowns = new Discord.Collection();
 client.commands = new Discord.Collection();
 client.config = config;
@@ -67,6 +67,10 @@ client.on('message', message => {
 
     if (!config.owners.includes(message.author.id)) {
 
+        if (command.NSFW && !message.channel.nsfw) {
+            return message.reply(`this command can only be used in a NSFW channel, gomenesai desu~`);
+        } 
+
         // Checks if the command author is a Bot Owner. (provided in /data/config.json)
         if (command.ownerOnly) {
             return message.reply(`you're not allowed to use this command, gomenesai desu~`);
@@ -79,20 +83,21 @@ client.on('message', message => {
 
         // PERMISSION CHECK //
         if (command.permissions) {
-            message.guild.fetchMember(message.author).then(guildMember => {
-
-                if (command.permissions === 'guild_owner' && guildMember.id !== message.guild.owner.id) {
+            if (message.guild) {
+                if (command.permissions === 'guild_owner' && message.member.id !== message.guild.owner.id) {
                     return message.reply(`you need to be the \`Guild Owner\` for this command, gomenesai desu~`)
                 }
 
-                if (command.permissions === 'administrator' && !guildMember.permissions.has("ADMINISTRATOR")) {
+                if (command.permissions === 'administrator' && !message.member.permissions.has("ADMINISTRATOR")) {
                     return message.reply(`you need to have the \`Administrator\` permission for this command, gomenesai desu~`)
                 }
                 
-                if (command.permissions === 'manage_guild' && !guildMember.permissions.has("MANAGE_GUILD")) {
+                if (command.permissions === 'manage_guild' && !message.member.permissions.has("MANAGE_GUILD")) {
                     return message.reply(`you need to have the \`Manage Guild\` permission for this command, gomenesai desu~`)
                 }
-            });
+            } else {
+                return;
+            }
         }
 
         // Checks if command is a setup cooldown
