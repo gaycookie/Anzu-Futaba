@@ -22,5 +22,8 @@ Packages to install:
 - request
 - mysql
 - weeb.js
+- ffmpeg-binaries
+- node-opus
+- ytdl-core
 
 Install with: npm install <name>
