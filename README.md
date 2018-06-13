@@ -24,6 +24,10 @@ Packages to install:
 - weeb.js
 - ffmpeg-binaries
 - node-opus
-- ytdl-core
+- listenmoe.js
 
 Install with: npm install <name>
+
+### Requested Features
+
+[![Feature Requests](http://feathub.com/kawaaii/Anzu-Futaba?format=svg)](http://feathub.com/kawaaii/Anzu-Futaba)
