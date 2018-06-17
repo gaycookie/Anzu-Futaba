@@ -31,6 +31,10 @@ See also the list of [Team Members](https://www.kawaaii.moe/anzu/) who participa
 - [ffmpeg-binaries](https://www.npmjs.com/package/ffmpeg-binaries) and [node-opus](https://www.npmjs.com/package/node-opus) to play music through Discord.
 - [listenmoe.js](https://www.npmjs.com/package/listenmoe.js) LISTEN.moe wrapper to get current track from LISTEN.moe.
 
+### Tools:
+
+- [Visual Studio Code](https://code.visualstudio.com/) to write and edit the code.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
