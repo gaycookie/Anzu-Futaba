@@ -1,3 +1,6 @@
+const GuildSettings = require('../guildSettings.js');
+const settings  = GuildSettings.lastSettings();
+
 exports.run = (client) => {
 
     const { status } = require('../constants.js');
@@ -10,6 +13,22 @@ exports.run = (client) => {
             client.user.setActivity(`${status[current]}`, { url: 'https://www.twitch.tv/noella_kawaii', type: 'STREAMING' })
             await sleep(20000);
             current++;
+        }
+    }
+
+    const stream = 'async:https://listen.moe/opus';
+    const streamOptions = { passes: 10, bitrate: 'auto' }
+
+    for (let item of settings.getAll('radio_channel')) {
+        if (client.channels.get(item).type === 'voice') {
+            client.channels.get(item).join({ shared: true })
+                .then(connection => {
+                    const dispatcher = connection.playStream(stream, streamOptions);
+                    dispatcher.on('error', error => {
+                        console.log(error);
+                    })
+                })
+                .catch(vc => { })
         }
     }
 
