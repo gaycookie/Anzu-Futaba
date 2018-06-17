@@ -22,7 +22,7 @@ See also the list of [Team Members](https://www.kawaaii.moe/anzu/) who participa
 
 ### License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ### Setup
 
