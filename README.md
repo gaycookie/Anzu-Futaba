@@ -5,8 +5,8 @@
 [![made-with-discordjs](https://img.shields.io/badge/using-discord.js-0095ce.svg)](https://discord.js.org/#/)
 
 Anzu Futaba, is a discord bot with roleplaying functions, written for [Node.js](https://nodejs.org/en/), using
-the [discord.js](https://discord.js.org/#/) library. She has a lot of functions to use with Roleplaying purposes.
-She has a lot of functions and settings to personalize Anzu to your likings.
+the [discord.js](https://discord.js.org/#/) library. 
+She has a lot of functions to use with Roleplaying purposes, and she has a lot of functions and settings to personalize Anzu to your likings.
 
 ## Commands
 
