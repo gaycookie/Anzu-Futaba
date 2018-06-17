@@ -8,36 +8,33 @@ Anzu Futaba, is a discord bot with roleplaying functions, written for [Node.js](
 the [discord.js](https://discord.js.org/#/) library. She has a lot of functions to use with Roleplaying purposes.
 She has a lot of functions and settings to personalize Anzu to your likings.
 
-### Commands
+## Commands
 
 There are a lot of command that you can use, and they can be quite confusing if you never used a discord bot before.
 If you wanna know more about to use and setup Anzu? Make sure to check out the documentations.
 You can find the documentations [here](https://www.noella.moe/docs)
 
-### Authors
+## Authors
 
 * **Ashley Muis** - *Head Developer* - [Kawaaii](https://github.com/kawaaii/)
 
 See also the list of [Team Members](https://www.kawaaii.moe/anzu/) who participated in this project.
 
-### License
+## Languages and Tools
+
+### NodeJS:
+
+- [discord.js](https://discord.js.org/) Discord Node.js Module.
+- [request](https://www.npmjs.com/package/request) in combination with [request-promise](https://www.npmjs.com/package/request-promise).
+- [mysql](https://www.npmjs.com/package/mysql) used to connect to the database.
+- [weeb.js](https://www.npmjs.com/package/weeb.js) Weeb Services wrapper (can only be used if partnered).
+- [ffmpeg-binaries](https://www.npmjs.com/package/ffmpeg-binaries) and [node-opus](https://www.npmjs.com/package/node-opus) to play music through Discord.
+- [listenmoe.js](https://www.npmjs.com/package/listenmoe.js) LISTEN.moe wrapper to get current track from LISTEN.moe.
+
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
-### Setup
-
-Packages to install:
-
-- discord.js
-- request
-- mysql
-- weeb.js
-- ffmpeg-binaries
-- node-opus
-- listenmoe.js
-
-Install with: npm install <name>
-
-### Requested Features
+## Requested Features
 
 [![Feature Requests](http://feathub.com/kawaaii/Anzu-Futaba?format=svg)](http://feathub.com/kawaaii/Anzu-Futaba)
