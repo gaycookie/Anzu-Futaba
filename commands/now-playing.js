@@ -1,5 +1,6 @@
 const Discord   = require('discord.js');
-const moe       = require('../main.js').moe;
+const main      = require('../main.js');
+const moe       = main.moe;
 
 module.exports = {
     name: 'nowplaying',
@@ -9,9 +10,7 @@ module.exports = {
     guildOnly: true,
     execute(message, args) {
 
-        //moe.connect();
         current_track = moe.getCurrentTrack();
-        console.log(current_track)
 
         let artists = current_track.song.artists[0].name;
         if (current_track.song.artists.length > 1) {
