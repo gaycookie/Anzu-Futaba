@@ -1,13 +1,23 @@
 const fs        = require('fs');
 const Discord   = require('discord.js');
 const config    = require('./data/config.json');
-const PrefixManager = require('./prefixManager.js');
-const { hearts, sad, status } = require('./constants.js');
-const prefix    = new PrefixManager('./data/prefix.json', config.prefix);
 const client    = new Discord.Client({autoReconnect:true});
 const cooldowns = new Discord.Collection();
 client.commands = new Discord.Collection();
-client.config = config;
+client.config   = config;
+
+// Constants //
+const { hearts, sad, status } = require('./constants.js');
+
+// New GuildSettings System //
+const GuildSettings = require('./guildSettings.js');
+const settings      = new GuildSettings();
+
+// Make Connection to LISTEN.moe //
+const ListenMoeJS  = require('listenmoe.js');
+const moe          = new ListenMoeJS('jpop');
+const connectMoe   = moe.connect();
+module.exports.moe = moe;
 
 fs.readdir("./events/", (err, files) => {
     if (err) return console.error(err);
@@ -37,8 +47,7 @@ client.on('message', message => {
         }
     }
 
-    // .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&') makes a string safe to use in a regexp
-    const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${prefix.get(message).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')})\\s*`);
+    const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${settings.get(message, 'prefix').replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')})\\s*`);
     
     if (!prefixRegex.test(message.content) || message.author.bot) return;
     const [matchedPrefix] = message.content.match(prefixRegex);
@@ -71,17 +80,14 @@ client.on('message', message => {
             return message.reply(`this command can only be used in a NSFW channel, gomenesai desu~`);
         } 
 
-        // Checks if the command author is a Bot Owner. (provided in /data/config.json)
         if (command.ownerOnly) {
             return message.reply(`you're not allowed to use this command, gomenesai desu~`);
         }
 
-        // Checks if the command is global disabled, still enabled for Bot Owners.
         if (command.disabled){
             return message.reply(`this command is disabled globally and can not be used, gomenesai desu~`);
         }
 
-        // PERMISSION CHECK //
         if (command.permissions) {
             if (message.guild) {
                 if (command.permissions === 'guild_owner' && message.member.id !== message.guild.owner.id) {
@@ -100,7 +106,6 @@ client.on('message', message => {
             }
         }
 
-        // Checks if command is a setup cooldown
         if (!cooldowns.has(command.name)) {
             cooldowns.set(command.name, new Discord.Collection());
         }
@@ -127,7 +132,6 @@ client.on('message', message => {
 
     }
 
-    // Checks if the command has arguments, if they are required.
     if (command.args && !args.length) {
         return message.reply(`this command requires arguments.\nFor more help about this command use: \`${prefix.get(message)}help ${commandName}\``);
     }
