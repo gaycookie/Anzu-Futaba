@@ -14,6 +14,16 @@ There are a lot of command that you can use, and they can be quite confusing if 
 If you wanna know more about to use and setup Anzu? Make sure to check out the documentations.
 You can find the documentations [here](https://www.noella.moe/docs)
 
+### Authors
+
+* **Ashley Muis** - *Head Developer* - [Kawaaii](https://github.com/kawaaii/)
+
+See also the list of [Team Members](https://www.kawaaii.moe/anzu/) who participated in this project.
+
+### License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
 ### Setup
 
 Packages to install:
