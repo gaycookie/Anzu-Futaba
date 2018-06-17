@@ -24,12 +24,12 @@ See also the list of [Team Members](https://www.kawaaii.moe/anzu/) who participa
 
 ### NodeJS:
 
-- [discord.js](https://discord.js.org/) Discord Node.js Module.
+- [discord.js](https://discord.js.org/) - Discord Node.js Module.
 - [request](https://www.npmjs.com/package/request) in combination with [request-promise](https://www.npmjs.com/package/request-promise).
-- [mysql](https://www.npmjs.com/package/mysql) used to connect to the database.
-- [weeb.js](https://www.npmjs.com/package/weeb.js) Weeb Services wrapper (can only be used if partnered).
-- [ffmpeg-binaries](https://www.npmjs.com/package/ffmpeg-binaries) and [node-opus](https://www.npmjs.com/package/node-opus) to play music through Discord.
-- [listenmoe.js](https://www.npmjs.com/package/listenmoe.js) LISTEN.moe wrapper to get current track from LISTEN.moe.
+- [mysql](https://www.npmjs.com/package/mysql) - MySQL wrapper to make a MySQL Database connection/executions.
+- [weeb.js](https://www.npmjs.com/package/weeb.js) - Weeb Services wrapper (can only be used if partnered).
+- [ffmpeg-binaries](https://www.npmjs.com/package/ffmpeg-binaries) and [node-opus](https://www.npmjs.com/package/node-opus) - Used to play music through Discord
+- [listenmoe.js](https://www.npmjs.com/package/listenmoe.js) - LISTEN.moe wrapper to get current track from LISTEN.moe.
 
 ### Tools:
 
