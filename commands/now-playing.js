@@ -3,7 +3,7 @@ const moe       = require('../main.js').moe;
 
 module.exports = {
     name: 'nowplaying',
-    description: `Check what LISTEN.moe is playing right now!`,
+    description: `To see the current playing song on LISTEN.moe, execute this command.`,
     //usage: '[emoji]',
     aliases: ['np', 'current'],
     guildOnly: true,

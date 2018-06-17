@@ -1,6 +1,6 @@
 module.exports = {
     name: 'listen',
-    description: `Play LISTEN.moe radio in your Discord.`,
+    description: `Wanna listen to LISTEN.moe radio? Join a voice channel, and then run this command.`,
     //usage: '[emoji]',
     aliases: ['listenmoe', 'join'],
     permissions: 'manage_guild',
