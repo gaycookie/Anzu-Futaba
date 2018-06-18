@@ -34,6 +34,12 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
+moe.on('error', error => {
+    console.log("Something went wrong with 'listenmoe.js' module.");
+    console.log(error);
+    return connectMoe();
+})
+
 client.on('message', message => {
 
     if (!message.author.bot && Math.floor(Math.random() * 5) + 1 === 2) {
