@@ -11,4 +11,3 @@ const mysqlConfig = {
 }
 
 module.exports = mysql.createPool(mysqlConfig);
-
