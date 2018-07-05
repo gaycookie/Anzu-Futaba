@@ -1,6 +1,5 @@
-const config        = require('../data/config.json');
-const PrefixManager = require('../prefixManager.js');
-const prefix        = PrefixManager.lastManager();
+const GuildSettings = require('../guildSettings.js');
+const settings      = new GuildSettings();
 
 module.exports = {
     name: 'prefix',
@@ -15,9 +14,9 @@ module.exports = {
         if (message.guild) {
             message.guild.fetchMember(message.author).then(guildMember => {
                 if (guildMember.permissions.has("MANAGE_GUILD")) {
-                    return message.reply(`the prefix for **${message.guild.name}** is \`${prefix.get(message)}\`\nTo edit the prefix for this guild, simply use \`${prefix.get(message)}setprefix <prefix>\``)    
+                    return message.reply(`the prefix for **${message.guild.name}** is \`${settings.get(message, 'prefix')}\`\nTo edit the prefix for this guild, simply use \`${settings.get(message, 'prefix')}setprefix <prefix>\``)    
                 }
-                return message.reply(`the prefix for **${message.guild.name}** is \`${prefix.get(message)}\``)
+                return message.reply(`the prefix for **${message.guild.name}** is \`${settings.get(message, 'prefix')}\``)
         })}
     },
 };
