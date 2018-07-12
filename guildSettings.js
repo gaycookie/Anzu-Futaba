@@ -28,6 +28,9 @@ class GuildSettings {
     }
     
     get(message, type) {
+        if (!message.guild && type === 'prefix') {
+            return this.defaultPrefix;
+        }
         if (message.guild && this.settings[message.guild.id] && type === 'prefix') {
             if (!this.settings[message.guild.id]['prefix']) return this.defaultPrefix;
             return this.settings[message.guild.id]['prefix'];
