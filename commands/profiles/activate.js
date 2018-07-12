@@ -1,5 +1,5 @@
-const connection = require('../dbPromised.js');
-const config     = require('../data/config.json');
+const connection = require('../../dbPromised.js');
+const config     = require('../../data/config.json');
 
 async function activate_boost_admin(message, args, member) {
 

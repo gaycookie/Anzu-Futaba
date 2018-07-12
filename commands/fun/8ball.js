@@ -1,4 +1,4 @@
-const answers = require('../data/eightball_answers.json')
+const answers = require('../../data/eightball_answers.json')
 
 module.exports = {
     name: '8ball',

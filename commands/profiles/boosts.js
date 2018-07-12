@@ -1,4 +1,4 @@
-const connection = require('../dbPromised.js');
+const connection = require('../../dbPromised.js');
 
 module.exports = {
     name: 'boosts',

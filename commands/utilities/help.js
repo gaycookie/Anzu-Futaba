@@ -1,7 +1,7 @@
 const Discord       = require('discord.js');
-const config        = require('../data/config.json');
-const PrefixManager = require('../prefixManager.js');
-const prefix        = PrefixManager.lastManager();
+const config        = require('../../data/config.json');
+const GuildSettings = require('../../guildSettings.js');
+const settings      = new GuildSettings();
 
 module.exports = {
     name: 'help',
@@ -16,7 +16,7 @@ module.exports = {
         if (!args.length) {
             data.push('Here\'s a list of all my commands:');
             data.push(commands.map(command => command.name).join(', '));
-            data.push(`\nYou can send \`${prefix.get(message)}help [command name]\` to get info on a specific command!`);
+            data.push(`\nYou can send \`${settings.get(message, 'prefix')}help [command name]\` to get info on a specific command!`);
             return message.channel.send(data, { split: true })
         }
 
@@ -34,7 +34,7 @@ module.exports = {
                 embed.setDescription(`${command.description}`)
                 embed.setThumbnail(`${message.client.user.avatarURL}`)
                 if (command.aliases) embed.addField('Command Aliases: ', `${command.aliases.join(', ')}`, false)
-                if (command.usage) embed.addField('Command Usage: ', `${prefix.get(message)}${command.name} ${command.usage}`, false)
+                if (command.usage) embed.addField('Command Usage: ', `${settings.get(message, 'prefix')}${command.name} ${command.usage}`, false)
                 if (command.permissions) embed.addField('Required Permissions: ', `${command.permissions}`, false)
                 if (command.cooldown) embed.addField('Command Cooldown: ', `${command.cooldown}`, false)
             return message.channel.send({embed: embed})
@@ -42,7 +42,7 @@ module.exports = {
             //data.push(`**Name:** ${command.name}`);
             //if (command.description) data.push(`**Description:** ${command.description}`);
             //if (command.aliases) data.push(`**Aliases:** ${command.aliases.join(', ')}`);
-            //if (command.usage) data.push(`**Usage:** ${prefix.get(message)}${command.name} ${command.usage}`);
+            //if (command.usage) data.push(`**Usage:** ${settings.get(message, 'prefix')}${command.name} ${command.usage}`);
             //if (command.permissions) data.push(`**Permission:** ${command.permissions}`)
             
             //data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`);

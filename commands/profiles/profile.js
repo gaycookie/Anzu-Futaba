@@ -1,5 +1,5 @@
 const Discord        = require('discord.js');
-const connection     = require('../dbPromised.js');
+const connection     = require('../../dbPromised.js');
 
 async function profile(message) {
     member = message.mentions.users.first()
@@ -34,6 +34,13 @@ async function profile(message) {
         commands_used = 'None yet'
     } else {
         commands_used = `${counts[0].command} (${counts[0].count} uses)`;
+    }
+
+    const [reputations] = await connection.execute("SELECT COUNT(*) as count FROM user_reputations WHERE user_id = ?;", [member.id]);
+    if (!reputations[0] || reputations[0].count == 0) {
+        reputations_total = 'None yet'
+    } else {
+        reputations_total = `${reputations[0].count} reputation points`
     }
 
     const [profile] = await connection.execute("SELECT * FROM user_marriages WHERE user_id = ? OR user_married_id = ?;", [member.id, member.id]);
@@ -84,6 +91,7 @@ async function profile(message) {
         .setThumbnail(member.avatarURL)
         .addField(`📈 | Experience (+${total_xp_boost}%): `, experience_total, true)
         .addField(`🍥 | Currency: (+${total_currency_boost}%)`, currency_total, true)
+        .addField('🌟 | Reputation Received: ', reputations_total, true)
         .addField('📟 | Most Used Command: ', commands_used, true)
         .addField('💍 | Married with: ', married_with, false)
         .addField(`🍼 | Active Boosts: `, active_boosts_list, false)

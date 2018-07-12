@@ -1,4 +1,4 @@
-const weeb_embed = require('../weebsh.js');
+const weeb_embed = require('../../weebsh.js');
 
 module.exports = {
     name: 'kiss',

@@ -1,5 +1,5 @@
-const config        = require('../data/config.json');
-const PrefixManager = require('../prefixManager.js');
+const config        = require('../../data/config.json');
+const PrefixManager = require('../../prefixManager.js');
 const prefix        = PrefixManager.lastManager();
 
 module.exports = {

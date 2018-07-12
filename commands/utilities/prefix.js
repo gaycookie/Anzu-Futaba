@@ -1,4 +1,4 @@
-const GuildSettings = require('../guildSettings.js');
+const GuildSettings = require('../../guildSettings.js');
 const settings      = new GuildSettings();
 
 module.exports = {

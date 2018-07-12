@@ -1,5 +1,5 @@
 const Discord    = require('discord.js');
-const connection = require('../dbPromised.js');
+const connection = require('../../dbPromised.js');
 const lookup     = ['💟', '2⃣', '3⃣', '4⃣', '5⃣'];
 
 async function show_guild_stats(message) {

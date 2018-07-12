@@ -1,4 +1,4 @@
-const config = require('../data/config.json');
+const config = require('../../data/config.json');
 
 module.exports = {
     name: 'ping',
