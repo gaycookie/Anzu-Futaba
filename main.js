@@ -1,6 +1,11 @@
 const fs        = require('fs');
 const Discord   = require('discord.js');
 const config    = require('./data/config.json');
+const db        = require("./db.js");
+const experience_function = require('./custom_modules/experience.js');
+const currency_function = require('./custom_modules/currency.js');
+const reactionRecently = new Set();
+
 const client    = new Discord.Client({autoReconnect:true});
 const cooldowns = new Discord.Collection();
 client.commands = new Discord.Collection();
@@ -13,9 +18,18 @@ const { hearts, sad, status } = require('./constants.js');
 const GuildSettings = require('./guildSettings.js');
 const settings      = new GuildSettings();
 
+// Make Connection to Humble Bundle Feed //
+let RssFeedEmitter  = require('rss-feed-emitter');
+let feeder          = new RssFeedEmitter();
+feeder.add({
+    url: 'http://blog.humblebundle.com/rss',
+    refresh: 2000
+});
+module.exports.feeder = feeder;
+
 // Make Connection to LISTEN.moe //
 const ListenMoeJS  = require('listenmoe.js');
-const moe          = new ListenMoeJS('jpop');
+const moe          = new ListenMoeJS('kpop');
 const connectMoe   = moe.connect();
 module.exports.moe = moe;
 
@@ -28,21 +42,45 @@ fs.readdir("./events/", (err, files) => {
     });
 });
 
+//const commandFiles = fs.readdirSync('./commands');
+//for (const file of commandFiles) {
+//    const command = require(`./commands/${file}`);
+//    client.commands.set(command.name, command);
+//}
+
+
 const commandFiles = fs.readdirSync('./commands');
 for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    client.commands.set(command.name, command);
+
+    if (fs.lstatSync(`./commands/${file}`).isDirectory()) {
+        const subDirection = `./commands/${file}`;
+        const subCommandFiles = fs.readdirSync(`${subDirection}`)
+
+        for (const fileInDir of subCommandFiles) {
+            const command = require(`${subDirection}/${fileInDir}`);
+            client.commands.set(command.name, command);
+        }
+    } else {
+        const command = require(`./commands/${file}`);
+        client.commands.set(command.name, command);
+    }
 }
+
 
 moe.on('error', error => {
     console.log("Something went wrong with 'listenmoe.js' module.");
     console.log(error);
-    return connectMoe();
+    return connectMoe;
 })
 
 client.on('message', message => {
 
-    if (!message.author.bot && Math.floor(Math.random() * 5) + 1 === 2) {
+    if (!message.author.bot && message.channel.type == 'text') {
+        experience_function(message);
+        currency_function(message);
+    }
+
+    if (!message.author.bot && !reactionRecently.has(message.author.id)) { //  && Math.floor(Math.random() * 5) + 1 === 2
         if (message.content.includes(`❤`) || message.content.includes(`♥`)) {
             message.channel.send(`${hearts[Math.floor(hearts.length * Math.random())]}`)
             .catch(() => {})
@@ -51,6 +89,10 @@ client.on('message', message => {
             message.channel.send(`${sad[Math.floor(sad.length * Math.random())]}`)
             .catch(() => {})
         }
+        reactionRecently.add(message.author.id);
+        setTimeout(() => {
+            reactionRecently.delete(message.author.id);
+        }, 60000);
     }
 
     const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${settings.get(message, 'prefix').replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')})\\s*`);
@@ -135,14 +177,16 @@ client.on('message', message => {
             timestamps.set(message.author.id, now);
             setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
         }
-
     }
 
     if (command.args && !args.length) {
-        return message.reply(`this command requires arguments.\nFor more help about this command use: \`${prefix.get(message)}help ${commandName}\``);
+        return message.reply(`this command requires arguments.\nFor more help about this command use: \`${settings.get(message, 'prefix')}help ${commandName}\``);
     }
 
     try {
+        if (message.guild && (!command.testMode || !command.ownerOnly)) {
+            db.query(`INSERT INTO commands (guild_id, channel_id, author_id, prefix, command) VALUES (?, ?, ?, ?, ?);`, [message.guild.id, message.channel.id, message.author.id, settings.get(message, 'prefix'), command.name]);
+        }
         command.execute(message, args);
     } catch (error) {
         console.error(error);

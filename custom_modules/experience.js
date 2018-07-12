@@ -1,5 +1,32 @@
-const connection = require('../dbPromised.js');
+const connection     = require('../dbPromised.js');
+const Discord        = require('discord.js');
 const talkedRecently = new Set();
+const Canvas         = require('canvas');
+const snekfetch      = require('snekfetch');
+const freude         = Canvas.registerFont('./data/images/resources/fonts/freude.otf', {family: 'freude'});
+
+async function level_up_image(message, currentLevel) {
+
+    const canvas = Canvas.createCanvas(89, 110);
+    const ctx = canvas.getContext('2d');
+    const background = await Canvas.loadImage('./data/images/resources/levelup-v1/base.png');
+    const overlay = await Canvas.loadImage('./data/images/resources/levelup-v1/levelup.png');
+
+    const {body: buffer1} = await snekfetch.get(message.author.displayAvatarURL);
+    const avatar = await Canvas.loadImage(buffer1);
+    
+    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(avatar, 15, 12, 58, 58);
+    ctx.drawImage(overlay, 0, 0, canvas.width, canvas.height);
+
+    ctx.font = '18px freude';
+    ctx.fillStyle = '#ef9ab7';
+    ctx.fillText(`level ${currentLevel}`, 12, 102.5);
+
+    const attachment = new Discord.Attachment(canvas.toBuffer(), 'level-up.png');
+    await message.reply(`<:kawaii_wave:455229625170264064> | **${message.author.username} leveled up!**`, attachment);
+
+}
 
 async function async_experience_function(message) {
     if (talkedRecently.has(message.author.id)) return;
@@ -22,7 +49,7 @@ async function async_experience_function(message) {
         let currentLevel = Math.floor(0.2 * Math.sqrt(user[0]['user_exp'] + 1));
         if (currentLevel > user[0]['user_lvl']) {
             await connection.execute("UPDATE user_experience SET user_exp = ? + ?, user_lvl = ? WHERE user_id = ?;", [user[0]['user_exp'], exp, currentLevel, message.author.id]);
-            await message.reply(`You've leveled up to level **${currentLevel}**, yayy! <:kawaii_wave:455229625170264064>`);
+            level_up_image(message, currentLevel);
         } else {
             await connection.execute("UPDATE user_experience SET user_exp = ? + ? WHERE user_id = ?;", [user[0]['user_exp'], exp, message.author.id]);
         }
