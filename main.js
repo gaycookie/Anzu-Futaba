@@ -1,37 +1,35 @@
-const fs        = require('fs');
-const Discord   = require('discord.js');
-const config    = require('./data/config.json');
-const db        = require("./db.js");
-const experience_function = require('./custom_modules/experience.js');
-const currency_function = require('./custom_modules/currency.js');
-const reactionRecently = new Set();
+const fs                        = require('fs');
+const Discord                   = require('discord.js');
+const config                    = require('./data/config.json');
+const connection                = require('./dbPromised.js');
+const experience_function       = require('./custom_modules/experience.js');
+const currency_function         = require('./custom_modules/currency.js');
+const reactionRecently          = new Set();
 
-const client    = new Discord.Client({autoReconnect:true});
-const cooldowns = new Discord.Collection();
-client.commands = new Discord.Collection();
-client.config   = config;
+const client                    = new Discord.Client({autoReconnect:true});
+const cooldowns                 = new Discord.Collection();
+client.commands                 = new Discord.Collection();
+client.config                   = config;
 
-// Constants //
-const { hearts, sad, status } = require('./constants.js');
+const { hearts, sad, status }   = require('./constants.js');
 
-// New GuildSettings System //
-const GuildSettings = require('./guildSettings.js');
-const settings      = new GuildSettings();
+const GuildSettings             = require('./guildSettings.js');
+const settings                  = new GuildSettings();
 
-// Make Connection to Humble Bundle Feed //
-let RssFeedEmitter  = require('rss-feed-emitter');
-let feeder          = new RssFeedEmitter();
+let RssFeedEmitter              = require('rss-feed-emitter');
+let feeder                      = new RssFeedEmitter();
 feeder.add({
     url: 'http://blog.humblebundle.com/rss',
     refresh: 2000
 });
-module.exports.feeder = feeder;
+module.exports.feeder           = feeder;
 
-// Make Connection to LISTEN.moe //
-const ListenMoeJS  = require('listenmoe.js');
-const moe          = new ListenMoeJS('kpop');
-const connectMoe   = moe.connect();
-module.exports.moe = moe;
+const ListenMoeJS               = require('listenmoe.js');
+const moe                       = new ListenMoeJS('kpop');
+const connectMoe                = moe.connect();
+module.exports.moe              = moe;
+
+// ------------------------------------------------------------------------------------//
 
 fs.readdir("./events/", (err, files) => {
     if (err) return console.error(err);
@@ -41,13 +39,6 @@ fs.readdir("./events/", (err, files) => {
       client.on(eventName, (...args) => eventFunction.run(client, ...args));
     });
 });
-
-//const commandFiles = fs.readdirSync('./commands');
-//for (const file of commandFiles) {
-//    const command = require(`./commands/${file}`);
-//    client.commands.set(command.name, command);
-//}
-
 
 const commandFiles = fs.readdirSync('./commands');
 for (const file of commandFiles) {
@@ -66,6 +57,11 @@ for (const file of commandFiles) {
     }
 }
 
+async function register_command(message, command) {
+    if (message.guild && (!command.testMode || !command.ownerOnly)) {
+        await connection.execute("INSERT INTO commands (guild_id, channel_id, author_id, prefix, command) VALUES (?, ?, ?, ?, ?);", [message.guild.id, message.channel.id, message.author.id, settings.get(message, 'prefix'), command.name]);
+    }
+}
 
 moe.on('error', error => {
     console.log("Something went wrong with 'listenmoe.js' module.");
@@ -184,9 +180,7 @@ client.on('message', message => {
     }
 
     try {
-        if (message.guild && (!command.testMode || !command.ownerOnly)) {
-            db.query(`INSERT INTO commands (guild_id, channel_id, author_id, prefix, command) VALUES (?, ?, ?, ?, ?);`, [message.guild.id, message.channel.id, message.author.id, settings.get(message, 'prefix'), command.name]);
-        }
+        register_command(message, command);
         command.execute(message, args);
     } catch (error) {
         console.error(error);
