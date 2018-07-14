@@ -1,11 +1,11 @@
 const weeb_embed = require('../../weebsh.js');
 
 module.exports = {
-    name: 'greet',
-    description: 'Kawaii Emotes: Greet Emote',
+    name: 'love',
+    description: 'Kawaii Emotes: Love Emote',
     usage: '<@mention>',
     guildOnly: true,
-    aliases: ['wave'],
+    aliases: [],
     execute(message, args) {
 
         message.guild.fetchMember(message.client.user).then(clientMember => {
@@ -23,10 +23,7 @@ module.exports = {
             const others = users.join(', ');
             const usersWithCommaAnd = (others ? [others, last].join(' and ') : last) || 'themself';
     
-            //if (!message.mentions.users.size) {
-            //    return weeb_embed('pout', `**${author} is pouting, giggles~**`, message);
-            //}
-            return weeb_embed('greet', `**${author} is greeting ${usersWithCommaAnd}, heyy~**`, message);
+            weeb_embed('hug', `**${author} loves ${usersWithCommaAnd}, so kawaii~**`, message);
 
         })
     },
