@@ -23,7 +23,7 @@ module.exports = {
             const others = users.join(', ');
             const usersWithCommaAnd = (others ? [others, last].join(' and ') : last) || 'themself';
     
-            weeb_embed('hug', `**${author} loves ${usersWithCommaAnd}, so kawaii~**`, message);
+            weeb_embed('deredere', `**${author} loves ${usersWithCommaAnd}, so kawaii~**`, message);
 
         })
     },
