@@ -51,7 +51,7 @@ module.exports = {
             return message.reply(`you need to mention at least one person to be able to ship.`);
         }
 
-        const result = Math.abs((parseInt(crc32(user1.id),16) * shipDate) - (parseInt(crc32(user2.id),16) * shipDate)) % 101;
+        const result = Math.abs((parseInt(crc32(user1.id),32) * shipDate) - (parseInt(crc32(user2.id),32) * shipDate)) % 101;
         shipImage(message, user1, user2, result);
     },
 };
