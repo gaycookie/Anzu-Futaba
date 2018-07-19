@@ -14,7 +14,7 @@ module.exports = {
             return message.reply(`you can only setup one prefix, gomenesai Senpai~`)
         }
 
-        if (args[0] === settings.get(message)) {
+        if (args[0] === settings.get(message, 'prefix', args[0])) {
             return message.reply(`you cant change the prefix to the current prefix, gomenesai Senpai~`)
         }
 
