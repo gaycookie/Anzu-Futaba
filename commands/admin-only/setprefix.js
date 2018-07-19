@@ -1,6 +1,6 @@
 const config        = require('../../data/config.json');
-const PrefixManager = require('../../prefixManager.js');
-const prefix        = PrefixManager.lastManager();
+const GuildSettings = require('../../guildSettings.js');
+const settings      = GuildSettings.lastManager();
 
 module.exports = {
     name: 'setprefix',
@@ -14,7 +14,11 @@ module.exports = {
             return message.reply(`you can only setup one prefix, gomenesai Senpai~`)
         }
 
-        if (prefix.set(message, args[0])) {
+        if (args[0] === settings.get(message)) {
+            return message.reply(`you cant change the prefix to the current prefix, gomenesai Senpai~`)
+        }
+
+        if (settings.set(message, args[0])) {
             return message.reply(`the prefix for **${message.guild.name}** was successfuly changed to \`${args[0]}\``)
         } else {
             return message.reply(`something went wrong with changing the prefix, gomenesai Senpai~`)
