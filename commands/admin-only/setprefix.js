@@ -1,6 +1,6 @@
 const config        = require('../../data/config.json');
 const GuildSettings = require('../../guildSettings.js');
-const settings      = GuildSettings.lastManager();
+const settings      = GuildSettings.lastSettings();
 
 module.exports = {
     name: 'setprefix',
