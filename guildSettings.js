@@ -36,6 +36,10 @@ class GuildSettings {
             return this.settings[message.guild.id]['prefix'];
         }
 
+        if (message.guild && !this.settings[message.guild.id] && type === 'prefix') {
+            return this.defaultPrefix;
+        }
+
         if (message.guild && this.settings[message.guild.id] && type === 'radio_channel') {
             if (this.settings[message.guild.id]['radio_channel']) {
                 return this.settings[message.guild.id]['radio_channel'];
