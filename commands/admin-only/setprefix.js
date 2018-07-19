@@ -14,10 +14,6 @@ module.exports = {
             return message.reply(`you can only setup one prefix, gomenesai Senpai~`)
         }
 
-        if (args[0] === prefix.get(message)) {
-            return message.reply(`you cant change the prefix to the current prefix, gomenesai Senpai~`)
-        }
-
         if (prefix.set(message, args[0])) {
             return message.reply(`the prefix for **${message.guild.name}** was successfuly changed to \`${args[0]}\``)
         } else {
