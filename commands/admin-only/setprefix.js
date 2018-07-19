@@ -18,7 +18,7 @@ module.exports = {
             return message.reply(`you cant change the prefix to the current prefix, gomenesai Senpai~`)
         }
 
-        if (settings.set(message, args[0])) {
+        if (settings.set(message, 'prefix', args[0])) {
             return message.reply(`the prefix for **${message.guild.name}** was successfuly changed to \`${args[0]}\``)
         } else {
             return message.reply(`something went wrong with changing the prefix, gomenesai Senpai~`)
