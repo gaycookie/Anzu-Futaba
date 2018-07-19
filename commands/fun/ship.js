@@ -52,7 +52,8 @@ module.exports = {
         }
 
         //const result = Math.abs((parseInt(crc32(user1.id),32) * shipDate) - (parseInt(crc32(user2.id),32) * shipDate)) % 101;
-        const result = Math.abs((parseInt(crc32(String(user1.id)),16)) - (parseInt(crc32(String(user2.id)),16)) * shipDate) % 101;
+        //const result = Math.abs((parseInt(crc32(user1),16)) - (parseInt(crc32(user2),16)) * shipDate) % 101;
+        const result = Math.abs(user1.id - user2.id) * shipDate % 101;
         shipImage(message, user1, user2, result);
     },
 };
