@@ -1,5 +1,7 @@
-const GuildSettings = require('../../guildSettings.js');
-const settings      = new GuildSettings();
+//const GuildSettings = require('../../guildSettings.js');
+//const settings      = GuildSettings.lastSettings();
+const settings      = require('../../main.js').settings;
+const discord       = require('discord.js');
 
 module.exports = {
     name: 'prefix',
@@ -11,12 +13,10 @@ module.exports = {
     //permissions: 'manage_guild',
     execute(message, args) {
 
-        if (message.guild) {
-            message.guild.fetchMember(message.author).then(guildMember => {
-                if (guildMember.permissions.has("MANAGE_GUILD")) {
-                    return message.reply(`the prefix for **${message.guild.name}** is \`${settings.get(message, 'prefix')}\`\nTo edit the prefix for this guild, simply use \`${settings.get(message, 'prefix')}setprefix <prefix>\``)    
-                }
-                return message.reply(`the prefix for **${message.guild.name}** is \`${settings.get(message, 'prefix')}\``)
-        })}
+        if (message.member.permissions.has("MANAGE_GUILD")) {
+            return message.reply(`the prefix for **${message.guild.name}** is \`${settings.get(message, 'prefix')}\`\nTo edit the prefix for this guild, simply use \`${settings.get(message, 'prefix')}setprefix <prefix>\``)    
+        }
+        return message.reply(`the prefix for **${message.guild.name}** is \`${settings.get(message, 'prefix')}\``)
+        
     },
 };

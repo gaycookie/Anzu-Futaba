@@ -24,6 +24,7 @@ const moe                       = new ListenMoeJS('kpop');
 const connectMoe                = moe.connect();
 module.exports.moe              = moe;
 module.exports.feeder           = feeder;
+module.exports.settings         = settings;
 
 // ------------------------------------------------------------------------------------//
 
