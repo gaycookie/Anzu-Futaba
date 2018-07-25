@@ -1,33 +1,29 @@
 const fs                        = require('fs');
 const Discord                   = require('discord.js');
+const RssFeedEmitter            = require('rss-feed-emitter');
+const ListenMoeJS               = require('listenmoe.js');
 const config                    = require('./data/config.json');
 const connection                = require('./dbPromised.js');
 const experience_function       = require('./custom_modules/experience.js');
 const currency_function         = require('./custom_modules/currency.js');
+const { hearts, sad, status }   = require('./data/constants.js');
+const GuildSettings             = require('./guildSettings.js');
 const reactionRecently          = new Set();
 
 const client                    = new Discord.Client({autoReconnect:true});
 const cooldowns                 = new Discord.Collection();
 client.commands                 = new Discord.Collection();
 client.config                   = config;
-
-const { hearts, sad, status }   = require('./constants.js');
-
-const GuildSettings             = require('./guildSettings.js');
 const settings                  = new GuildSettings();
-
-let RssFeedEmitter              = require('rss-feed-emitter');
 let feeder                      = new RssFeedEmitter();
 feeder.add({
     url: 'http://blog.humblebundle.com/rss',
     refresh: 2000
 });
-module.exports.feeder           = feeder;
-
-const ListenMoeJS               = require('listenmoe.js');
 const moe                       = new ListenMoeJS('kpop');
 const connectMoe                = moe.connect();
 module.exports.moe              = moe;
+module.exports.feeder           = feeder;
 
 // ------------------------------------------------------------------------------------//
 
@@ -60,7 +56,7 @@ for (const file of commandFiles) {
 async function register_command(message, command) {
     if (message.guild && (!command.testMode || !command.ownerOnly)) {
         await connection.execute("INSERT INTO commands (guild_id, channel_id, author_id, prefix, command) VALUES (?, ?, ?, ?, ?);", [message.guild.id, message.channel.id, message.author.id, settings.get(message, 'prefix'), command.name]);
-    }
+    };
 }
 
 moe.on('error', error => {
@@ -74,6 +70,10 @@ client.on('message', message => {
     if (!message.author.bot && message.channel.type == 'text') {
         experience_function(message);
         currency_function(message);
+    }
+
+    if (!message.guild.me.permissionsIn(message.channel).has('SEND_MESSAGES')) {
+        return;
     }
 
     if (!message.author.bot && !reactionRecently.has(message.author.id)) { //  && Math.floor(Math.random() * 5) + 1 === 2
