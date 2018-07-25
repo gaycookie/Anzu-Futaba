@@ -26,7 +26,7 @@ async function level_up_image(message, currentLevel) {
     const attachment = new Discord.Attachment(canvas.toBuffer(), 'level-up.png');
     try {
         await message.reply(`<:kawaii_wave:455229625170264064> | **${message.author.username} leveled up!**`, attachment);
-    } catch {
+    } catch (error) {
         return;
     }
 

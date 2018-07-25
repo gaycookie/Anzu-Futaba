@@ -40,6 +40,7 @@ module.exports = {
         let user2;
 
         if (message.mentions.users.size) {
+            
             if (message.mentions.users.size < 2) {
                 user1 = message.mentions.users.first();
                 user2 = message.author;

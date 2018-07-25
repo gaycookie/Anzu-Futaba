@@ -32,7 +32,7 @@ exports.run = (client) => {
         }
     });
 
-    const { status } = require('../constants.js');
+    const { status } = require('../data/constants.js');
 
     function sleep(ms) {return new Promise(resolve => setTimeout(resolve, ms));}
     async function activity() {
