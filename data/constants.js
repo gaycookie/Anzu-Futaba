@@ -1,6 +1,6 @@
 module.exports = {
     status: [
-        '助けが必要？ "n!help" を使う',
+        '助けが必要? "n!help" を使う',
         '"n!invite" で私を招待したい',
         '"n!vote" を使って私に投票してください'
     ],
