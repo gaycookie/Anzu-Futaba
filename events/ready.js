@@ -33,7 +33,6 @@ exports.run = (client) => {
     });
 
     const { status } = require('../data/constants.js');
-
     function sleep(ms) {return new Promise(resolve => setTimeout(resolve, ms));}
     async function activity() {
         let current = 0;
@@ -69,6 +68,6 @@ exports.run = (client) => {
     console.log(`| Guilds: ${client.guilds.size}`)
     console.log(`| Users: ${client.users.size}`)
     console.log(`|-------------------`)
-    activity();
+    //activity();
 
 }

@@ -188,9 +188,6 @@ client.on('message', message => {
     }
 
     try {
-
-
-
         register_command(message, command);
         command.execute(message, args);
     } catch (error) {
