@@ -3,6 +3,7 @@ const Discord                   = require('discord.js');
 const RssFeedEmitter            = require('rss-feed-emitter');
 const ListenMoeJS               = require('listenmoe.js');
 const config                    = require('./data/config.json');
+const disabled                  = require('./data/disabled.json');
 const connection                = require('./dbPromised.js');
 const experience_function       = require('./custom_modules/experience.js');
 const currency_function         = require('./custom_modules/currency.js');
@@ -121,6 +122,12 @@ client.on('message', message => {
 
     if (!config.owners.includes(message.author.id)) {
 
+        if (disabled.channels.includes(message.channel.id)) {
+            if (message.member.id !== message.guild.owner.id) { return; };
+            if (!message.member.permissions.has("ADMINISTRATOR")) { return; };
+            if (!message.member.permissions.has("MANAGE_GUILD")) { return; };
+        };
+
         if (command.NSFW && !message.channel.nsfw) {
             return message.reply(`this command can only be used in a NSFW channel, gomenesai desu~`);
         } 
@@ -181,6 +188,9 @@ client.on('message', message => {
     }
 
     try {
+
+
+
         register_command(message, command);
         command.execute(message, args);
     } catch (error) {
