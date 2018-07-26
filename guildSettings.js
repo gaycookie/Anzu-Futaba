@@ -63,6 +63,24 @@ class GuildSettings {
 
     };
     
+    getAllKPOP() {
+        let kpop_array = [];
+        for (let guilds in this.settings) {
+            if (this.settings[guilds]['radio_genre'] == 'kpop' && this.settings[guilds]['radio_channel'])
+            kpop_array.push(this.settings[guilds]['radio_channel'])
+        };
+        return kpop_array;
+    }
+
+    getAllJPOP() {
+        let jpop_array = [];
+        for (let guilds in this.settings) {
+            if (this.settings[guilds]['radio_genre'] == 'jpop' && this.settings[guilds]['radio_channel'])
+            jpop_array.push(this.settings[guilds]['radio_channel'])
+        };
+        return jpop_array;
+    }
+
     getAll(type) {
         if (type == 'radio_channel') {
             let array = [];

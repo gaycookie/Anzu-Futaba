@@ -44,14 +44,28 @@ exports.run = (client) => {
         }
     }
 
-    const stream = 'async:https://listen.moe/kpop/opus';
+    const streamKPOP = 'async:https://listen.moe/kpop/opus';
+    const streamJPOP = 'async:https://listen.moe/opus';
     const streamOptions = { passes: 10, bitrate: 'auto' }
 
-    for (let item of settings.getAll('radio_channel')) {
+    for (let item of settings.getAllKPOP()) {
         if (client.channels.get(item).type === 'voice') {
             client.channels.get(item).join({ shared: true })
                 .then(connection => {
-                    const dispatcher = connection.playStream(stream, streamOptions);
+                    const dispatcher = connection.playStream(streamKPOP, streamOptions);
+                    dispatcher.on('error', error => {
+                        console.log(error);
+                    })
+                })
+                .catch(vc => { })
+        }
+    }
+
+    for (let item of settings.getAllJPOP()) {
+        if (client.channels.get(item).type === 'voice') {
+            client.channels.get(item).join({ shared: true })
+                .then(connection => {
+                    const dispatcher = connection.playStream(streamJPOP, streamOptions);
                     dispatcher.on('error', error => {
                         console.log(error);
                     })
