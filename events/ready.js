@@ -68,6 +68,6 @@ exports.run = (client) => {
     console.log(`| Guilds: ${client.guilds.size}`)
     console.log(`| Users: ${client.users.size}`)
     console.log(`|-------------------`)
-    //activity();
+    activity();
 
 }
