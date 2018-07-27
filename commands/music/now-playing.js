@@ -1,5 +1,6 @@
 const Discord   = require('discord.js');
 const main      = require('../../main.js');
+const settings  = main.settings;
 const moeKPOP   = main.moeKPOP;
 const moeJPOP   = main.moeJPOP;
 
