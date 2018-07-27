@@ -18,15 +18,15 @@ function listen_embed(message, type) {
         embed_color   = '#30a9ed'
     }
 
-    let artists = current_track.song.artists[0].name;
-    if (current_track.song.artists.length > 1) {
+    let artists = 'None';
+    if (current_track.song.artists.length) {
         artists_array = [];
         for (let artist in current_track.song.artists) {
             var value = current_track.song.artists[artist].name;
             if (value) {artists_array.push(value)};
         }
         artists = artists_array.join(", ")
-    }
+    } 
 
     let albums = 'None';
     let thumbnail = `${message.client.user.avatarURL}`;
