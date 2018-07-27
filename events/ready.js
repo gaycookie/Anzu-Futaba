@@ -1,18 +1,18 @@
-const GuildSettings = require('../guildSettings.js');
-const settings  = GuildSettings.lastSettings();
-const auto_track = require('../custom_modules/current-track.js')
-const main      = require('../main.js');
-const moe       = main.moe;
-const feeder    = main.feeder;
-const humble_bundle = require('../custom_modules/humble-bundle.js');
-const Discord   = require('discord.js');
+const GuildSettings     = require('../guildSettings.js');
+const settings          = GuildSettings.lastSettings();
+const auto_track        = require('../custom_modules/current-track.js')
+const main              = require('../main.js');
+//const moe               = main.moe;
+const feeder            = main.feeder;
+const humble_bundle     = require('../custom_modules/humble-bundle.js');
+const Discord           = require('discord.js');
 
 exports.run = (client) => {
 
-    moe.on('updateTrack', (current_track) => {
-        channel = client.channels.get('458310090454466562');
-        auto_track(client, channel, current_track);
-    });
+    //moe.on('updateTrack', (current_track) => {
+    //    channel = client.channels.get('458310090454466562');
+    //    auto_track(client, channel, current_track);
+    //});
 
     feeder.on('new-item', (item) => {
         console.log('There was an Humble Blog posted.')
