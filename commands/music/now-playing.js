@@ -8,8 +8,14 @@ function listen_embed(message, type) {
 
     if (type == 'jpop') {
         current_track = moeJPOP.getCurrentTrack();
+        stream_name   = 'JPOP'
+        embed_image   = 'https://www.kawaaii.moe/images/discord/Listen.moe/listenmoeJPOP.png';
+        embed_color   = '#ff005b'
     } else {
         current_track = moeKPOP.getCurrentTrack();
+        stream_name   = 'KPOP'
+        embed_image   = 'https://www.kawaaii.moe/images/discord/Listen.moe/listenmoeKPOP.png';
+        embed_color   = '#30a9ed'
     }
 
     let artists = current_track.song.artists[0].name;
@@ -43,13 +49,13 @@ function listen_embed(message, type) {
     }
 
     const nowPlayingEmbed = new Discord.RichEmbed()
-        .setColor(16670894)
-        .setTitle(`${message.client.user.username} is now playing`)
+        .setColor(embed_color)
+        .setTitle(`${message.client.user.username} is now playing **${stream_name}**`)
         .setThumbnail(`${thumbnail}`)
         .addField('Song Name:', `${current_track.song.title}`)
         .addField('Song Artist: ', `${artists}`)
         .addField('Song Albums:', `${albums}`)
-        .setFooter('Music Powered by LISTEN.moe', 'https://listen.moe/public/images/icons/android-chrome-192x192.png');
+        .setFooter('Music Powered by LISTEN.moe', embed_image);
 
     message.channel.send({ embed: nowPlayingEmbed });
 }
