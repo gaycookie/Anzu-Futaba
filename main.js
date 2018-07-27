@@ -21,9 +21,12 @@ feeder.add({
     url: 'http://blog.humblebundle.com/rss',
     refresh: 2000
 });
-const moe                       = new ListenMoeJS('kpop');
-const connectMoe                = moe.connect();
-module.exports.moe              = moe;
+const moeKPOP                   = new ListenMoeJS('kpop');
+const moeJPOP                   = new ListenMoeJS('jpop');
+const connectMoeKPOP            = moeKPOP.connect();
+const connectMoeJPOP            = moeJPOP.connect();
+module.exports.moeKPOP          = moeKPOP;
+module.exports.moeJPOP          = moeJPOP;
 module.exports.feeder           = feeder;
 module.exports.settings         = settings;
 
