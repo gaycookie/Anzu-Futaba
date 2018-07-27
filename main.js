@@ -64,7 +64,13 @@ async function register_command(message, command) {
     };
 }
 
-moe.on('error', error => {
+moeKPOP.on('error', error => {
+    console.log("Something went wrong with 'listenmoe.js' module.");
+    console.log(error);
+    return connectMoe;
+})
+
+moeJPOP.on('error', error => {
     console.log("Something went wrong with 'listenmoe.js' module.");
     console.log(error);
     return connectMoe;
