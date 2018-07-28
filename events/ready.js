@@ -46,8 +46,8 @@ exports.run = (client) => {
 
     function speaking(connection, dispatcher) {
         const hook = new Discord.WebhookClient('472727454054744069', 'hhaicowySuB5qAxGvwcO9rHt3OFl1SzmAf1Ij1wA3BD3cFTX7A4TlUwhFASpdwXCP96u');
-        connection.on('speaking', (user, speaking) => {
-            console.log(speaking)
+        dispatcher.on('speaking', (speaking) => { // Weird that User was not a thing.. I guess the Doc's aren't up to date!
+            console.log(speaking);
             if (speaking == true) {
                 hook.send(`${connection.client.users.get('139191103625625600')} | Started Streaming in "${connection.channel.name}"`)
             } else {
