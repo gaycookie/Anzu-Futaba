@@ -46,8 +46,8 @@ exports.run = (client) => {
 
     function speaking(connection, dispatcher) {
         const hook = new Discord.WebhookClient('472727454054744069', 'hhaicowySuB5qAxGvwcO9rHt3OFl1SzmAf1Ij1wA3BD3cFTX7A4TlUwhFASpdwXCP96u');
-        dispatcher.on('speaking', (user, speaking) => {
-            if (speaking != false) {
+        connection.on('speaking', (user, speaking) => {
+            if (speaking == true) {
                 hook.send(`${connection.client.users.get('139191103625625600')} | Started Streaming in "${connection.channel.name}"`)
             } else {
                 hook.send(`${connection.client.users.get('139191103625625600')} | Something went wrong with the stream in "${connection.channel.name}"`)
