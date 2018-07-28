@@ -44,6 +44,17 @@ exports.run = (client) => {
         }
     }
 
+    function speaking(connection, dispatcher) {
+        const hook = new Discord.WebhookClient('472727454054744069', 'hhaicowySuB5qAxGvwcO9rHt3OFl1SzmAf1Ij1wA3BD3cFTX7A4TlUwhFASpdwXCP96u');
+        dispatcher.on('speaking', (user, speaking) => {
+            if (speaking != false) {
+                hook.send(`${connection.client.users.get('139191103625625600')} | Started Streaming in "${connection.channel.name}"`)
+            } else {
+                hook.send(`${connection.client.users.get('139191103625625600')} | Something went wrong with the stream in "${connection.channel.name}"`)
+            }
+        })
+    }
+
     const streamKPOP = 'async:https://listen.moe/kpop/opus';
     const streamJPOP = 'async:https://listen.moe/opus';
     const streamOptions = { passes: 10, bitrate: 'auto' }
@@ -53,9 +64,7 @@ exports.run = (client) => {
             client.channels.get(item).join({ shared: true })
                 .then(connection => {
                     const dispatcher = connection.playStream(streamKPOP, streamOptions);
-                    dispatcher.on('error', error => {
-                        console.log(error);
-                    })
+                    speaking(connection, dispatcher);
                 })
                 .catch(vc => { })
         }
@@ -66,9 +75,7 @@ exports.run = (client) => {
             client.channels.get(item).join({ shared: true })
                 .then(connection => {
                     const dispatcher = connection.playStream(streamJPOP, streamOptions);
-                    dispatcher.on('error', error => {
-                        console.log(error);
-                    })
+                    speaking(connection, dispatcher);
                 })
                 .catch(vc => { })
         }

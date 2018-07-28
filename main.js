@@ -64,13 +64,6 @@ async function register_command(message, command) {
     };
 }
 
-client.on('guildMemberSpeaking', (member, speaking) => {
-    if (member.client.user.id == member.id && speaking == false) {
-        const hook = new Discord.WebhookClient('472727454054744069', 'hhaicowySuB5qAxGvwcO9rHt3OFl1SzmAf1Ij1wA3BD3cFTX7A4TlUwhFASpdwXCP96u');
-        hook.send(`I stopped playing music in Guild: **${member.guild.name}** (ID: ${member.guild.id})`);
-    };
-});
-
 moeKPOP.on('error', error => {
     console.log("Something went wrong with 'listenmoe.js' module.");
     console.log(error);
