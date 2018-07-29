@@ -16,7 +16,7 @@ function play_radio(client) {
 
         if (radio_channel.type == 'voice' && radio_channel.speakable) {
             radio_channel.join().then(connection => {
-                const dispatcher = connection.playStream(stream(streamJPOP));
+                const dispatcher = connection.playStream(streamJPOP);
                 hook.send(`Started streaming JPOP in **${guild.name}** in channel **${radio_channel.name}**`)
                 dispatcher.on('end', () => { 
                     hook.send(`${connection.client.users.get('139191103625625600')} | Restarting the stream in **${radio_channel.name}** in channel **${guild.name}**`);
