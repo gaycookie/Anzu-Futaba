@@ -10,8 +10,8 @@ const settings          = main.settings;
 
 exports.run = (client) => {
 
-    const listen_moe        = require('../custom_modules/Listen-moe.js');
-    listen_moe.auto_play(client);
+    const listen_moe        = require('../custom_modules/listen-moe.js');
+    listen_moe.play_radio(client);
 
     //moe.on('updateTrack', (current_track) => {
     //    channel = client.channels.get('458310090454466562');

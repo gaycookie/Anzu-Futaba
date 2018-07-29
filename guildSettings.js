@@ -92,6 +92,17 @@ class GuildSettings {
         };
     };
 
+    get_channels(type) {
+        if (type == 'radio') {
+            let array = [];
+            for (let guilds in this.settings) {
+                var value = this.settings[guilds]['radio_channel'];
+                if (value) {array.push(value)};
+            };
+            return array;
+        };
+    };    
+
     set(message, type, argument) {
         if (!message.guild) return;
 
