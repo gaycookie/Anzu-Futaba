@@ -16,19 +16,13 @@ function play_radio(client) {
 
         if (radio_channel.type == 'voice' && radio_channel.speakable) {
             radio_channel.join().then(connection => {
-                const dispatcher = connection.playStream(streamJPOP);
+                let dispatcher;
+                dispatcher = connection.playStream(streamJPOP);
                 hook.send(`Started streaming JPOP in **${guild.name}** in channel **${radio_channel.name}**`)
                 dispatcher.on('end', () => { 
                     hook.send(`${connection.client.users.get('139191103625625600')} | Restarting the stream in **${radio_channel.name}** in channel **${guild.name}**`);
-                    play(client);
+                    dispatcher = connection.playStream(streamJPOP);
                 });
-                //dispatcher.on('speaking', (speaking) => {
-                //    if (speaking == false) {
-                //        hook.send(`${connection.client.users.get('139191103625625600')} | Something went wrong with the stream in **${radio_channel.name}** in **${guild.name}**`);
-                //        dispatcher.disconnect();
-                //        play_radio(client)
-                //    };
-                //});
             });
         }
     }
