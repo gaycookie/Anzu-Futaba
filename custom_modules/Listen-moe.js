@@ -12,6 +12,7 @@ function speaking(client, connection, dispatcher) {
         console.log(speaking);
         if (speaking == false) {
             hook.send(`${connection.client.users.get('139191103625625600')} | Something went wrong with the stream in "${connection.channel.name}"`);
+            auto_play(client);
         };
     })
 }
