@@ -9,7 +9,6 @@ module.exports = {
 
         async function get_boosts(message, args) {
             const [boosts] = await connection.execute(`SELECT * FROM boosts WHERE type_name LIKE ?;`, [`%${args.join(" ")}%`]);
-            console.log(boosts[0])
             if (boosts[0]) {
     
                 let boost_columns = [];
