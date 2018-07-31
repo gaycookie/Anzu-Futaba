@@ -2,8 +2,8 @@ const auto_track        = require('../custom_modules/current-track.js');
 const main              = require('../main.js');
 const settings          = main.settings;
 const webhook           = main.webhook;
-const streamJPOP        = 'async:https://listen.moe/stream';
-const streamOptions     = { passes: 10, bitrate: 'auto' }
+const streamJPOP        = 'https://listen.moe/opus';
+//const streamOptions     = { passes: 10, bitrate: 'auto' }
 
 
 //const moe               = main.moe;
@@ -13,19 +13,25 @@ const streamOptions     = { passes: 10, bitrate: 'auto' }
 
 exports.run = (client) => {
 
-    const broadcast = client.createVoiceBroadcast();
-    broadcast.playStream(streamJPOP, streamOptions);
+    playRadio(client);
+    function playRadio(client) {
+        const broadcast = client.createVoiceBroadcast();
+        broadcast.play(streamJPOP);
+    
+        const listen_moe = require('../custom_modules/listen-moe.js');
+        listen_moe.autoRadio(broadcast);
+    
+        broadcast.on('error', (error) => {
+            webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Error:** ${error}`);
+            playRadio(client);
+        });
+    
+        broadcast.on('end', () => { 
+            webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Broadcast was stopped..**`);
+            playRadio(client);
+        });
+    }
 
-    const listen_moe = require('../custom_modules/listen-moe.js');
-    listen_moe.autoRadio(broadcast);
-
-    broadcast.on('warn', (error) => {
-        webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Error:** ${error}`);
-    });
-
-    broadcast.on('end', () => { 
-        webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Broadcast was stopped..**`);
-    });
 
     //moe.on('updateTrack', (current_track) => {
     //    channel = client.channels.get('458310090454466562');
