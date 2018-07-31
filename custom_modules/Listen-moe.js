@@ -3,20 +3,23 @@ const main              = require('../main.js');
 const config            = require('../data/config.json');
 const settings          = main.settings;
 const client            = main.client;
-const hook              = new Discord.WebhookClient(config.webhook.id, config.webhook.token);
+const webhook           = main.webhook;
 
 function autoRadio(broadcast) {
+
+    // Connects to all the Radio channels (upon startup)
     for (let item of settings.get_channels('radio')) {
         const radio_channel = client.channels.get(item);
         const guild         = radio_channel.guild;
     
         if (radio_channel.type == 'voice' && radio_channel.speakable) {
             radio_channel.join().then(() => {
-                hook.send(`Started streaming JPOP in **${guild.name}** in channel **${radio_channel.name}**`)
+                webhook.send(`Started streaming JPOP in **${guild.name}** in channel **${radio_channel.name}**`)
             });
         };
     };
 
+    // Starts streaming the radio to all current connected channels.
     for (const connection of client.voiceConnections.values()) {
         connection.playBroadcast(broadcast);
     };

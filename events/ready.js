@@ -15,12 +15,17 @@ exports.run = (client) => {
 
     const broadcast = client.createVoiceBroadcast();
     broadcast.playStream(streamJPOP, streamOptions);
+    console.log(broadcast);
 
     const listen_moe = require('../custom_modules/listen-moe.js');
     listen_moe.autoRadio(broadcast);
 
+    broadcast.on('warn', (error) => {
+        webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Error:** ${error}`);
+    });
+
     broadcast.on('end', () => { 
-        webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!`);
+        webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Broadcast was stopped..**`);
     });
 
     //moe.on('updateTrack', (current_track) => {
