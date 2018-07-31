@@ -16,7 +16,7 @@ exports.run = (client) => {
     playRadio(client);
     function playRadio(client) {
         const broadcast = client.createVoiceBroadcast();
-        broadcast.play('async:https://listen.moe/opus');
+        broadcast.playStream('async:https://listen.moe/opus');
     
         const listen_moe = require('../custom_modules/listen-moe.js');
         listen_moe.autoRadio(broadcast);
