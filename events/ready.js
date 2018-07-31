@@ -2,7 +2,7 @@ const auto_track        = require('../custom_modules/current-track.js');
 const main              = require('../main.js');
 const settings          = main.settings;
 const webhook           = main.webhook;
-const streamJPOP        = 'async:https://listen.moe/opus';
+const streamJPOP        = 'async:https://listen.moe/stream';
 const streamOptions     = { passes: 10, bitrate: 'auto' }
 
 
