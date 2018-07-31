@@ -15,7 +15,6 @@ exports.run = (client) => {
 
     const broadcast = client.createVoiceBroadcast();
     broadcast.playStream(streamJPOP, streamOptions);
-    console.log(broadcast);
 
     const listen_moe = require('../custom_modules/listen-moe.js');
     listen_moe.autoRadio(broadcast);
