@@ -1,7 +1,8 @@
 const auto_track        = require('../custom_modules/current-track.js');
 const main              = require('../main.js');
 const settings          = main.settings;
-
+const streamJPOP        = 'async:https://listen.moe/opus';
+const streamOptions     = { passes: 10, bitrate: 'auto' }
 
 //const moe               = main.moe;
 //const feeder            = main.feeder;
@@ -10,8 +11,11 @@ const settings          = main.settings;
 
 exports.run = (client) => {
 
-    const listen_moe        = require('../custom_modules/listen-moe.js');
-    listen_moe.play_radio(client);
+    const broadcast = client.createVoiceBroadcast();
+    broadcast.playStream(streamJPOP, streamOptions);
+
+    const listen_moe = require('../custom_modules/listen-moe.js');
+    listen_moe.autoRadio(broadcast);
 
     //moe.on('updateTrack', (current_track) => {
     //    channel = client.channels.get('458310090454466562');

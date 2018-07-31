@@ -29,6 +29,7 @@ module.exports.moeKPOP          = moeKPOP;
 module.exports.moeJPOP          = moeJPOP;
 module.exports.feeder           = feeder;
 module.exports.settings         = settings;
+module.exports.client           = client;
 
 // ------------------------------------------------------------------------------------//
 
