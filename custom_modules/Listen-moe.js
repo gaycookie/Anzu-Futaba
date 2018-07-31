@@ -15,7 +15,6 @@ function autoRadio(broadcast) {
         if (radio_channel.type == 'voice' && radio_channel.speakable) {
             radio_channel.join()
             joined_channels = joined_channels + 1;
-            };
         };
     };
     webhook.send(`Started broadcasting in **${joined_channels}** configured voice-channels.`)
