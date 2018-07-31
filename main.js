@@ -14,6 +14,7 @@ const reactionRecently          = new Set();
 const client                    = new Discord.Client({autoReconnect:true});
 const cooldowns                 = new Discord.Collection();
 client.commands                 = new Discord.Collection();
+const webhook                   = new Discord.WebhookClient(config.webhook.id, config.webhook.token);
 client.config                   = config;
 const settings                  = new GuildSettings();
 let feeder                      = new RssFeedEmitter();
@@ -30,6 +31,7 @@ module.exports.moeJPOP          = moeJPOP;
 module.exports.feeder           = feeder;
 module.exports.settings         = settings;
 module.exports.client           = client;
+module.exports.webhook          = webhook;
 
 // ------------------------------------------------------------------------------------//
 

@@ -18,18 +18,15 @@ function autoRadio(broadcast) {
     };
 
     for (const connection of client.voiceConnections.values()) {
-        const dispatcher = connection.playBroadcast(broadcast);
-        dispatcher.on('end', () => { 
-            hook.send(`${connection.client.users.get('139191103625625600')} | Something went wrong with the Stream in **${connection.channel.guild.name}** (${connection.channel.name})`);
-        });
+        connection.playBroadcast(broadcast);
     };
 };
 
-function newRadio() {
+function newRadio(message, broadcast) {
     // Add a new guild to the settings, and then plays the radio.
 };
 
-function playRadio() {
+function playRadio(message, broadcast) {
     // Just plays the radio for one time, doesn't add settings.
 }
 
