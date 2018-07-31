@@ -7,17 +7,18 @@ const webhook           = main.webhook;
 
 function autoRadio(broadcast) {
 
+    let joined_channels = 0;
     // Connects to all the Radio channels (upon startup)
     for (let item of settings.get_channels('radio')) {
         const radio_channel = client.channels.get(item);
-        const guild         = radio_channel.guild;
     
         if (radio_channel.type == 'voice' && radio_channel.speakable) {
-            radio_channel.join().then(() => {
-                webhook.send(`Started streaming JPOP in **${guild.name}** in channel **${radio_channel.name}**`)
+            radio_channel.join()
+            joined_channels = joined_channels + 1;
             });
         };
     };
+    webhook.send(`Started broadcasting in **${joined_channels}** configured voice-channels.`)
 
     // Starts streaming the radio to all current connected channels.
     for (const connection of client.voiceConnections.values()) {
