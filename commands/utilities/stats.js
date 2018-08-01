@@ -65,7 +65,7 @@ async function show_user_stats(message) {
     const [total5] = await connection.execute("SELECT command, COUNT(*) as count FROM commands WHERE author_id = ? GROUP BY command ORDER BY count DESC LIMIT 5;", [user.id]);
     let top5_total = [];
     await total5.forEach(function (value, i) {
-        if (value) {
+        if (total5) {
             command = `${lookup[i]}: ${value.command} (${value.count} uses)`    
         } else {
             command = 'None'
@@ -76,7 +76,7 @@ async function show_user_stats(message) {
     const [monthly5] = await connection.execute("SELECT command, COUNT(*) as count FROM commands WHERE author_id = ? AND used > (CURRENT_TIMESTAMP - INTERVAL 1 MONTH) GROUP BY command ORDER BY count DESC LIMIT 5;", [user.id]);
     let top5_monthly = [];
     await monthly5.forEach(function (value, i) {
-        if (value) {
+        if (monthly5) {
             command = `${lookup[i]}: ${value.command} (${value.count} uses)`    
         } else {
             command = 'None'
@@ -87,7 +87,7 @@ async function show_user_stats(message) {
     const [weekly5] = await connection.execute("SELECT command, COUNT(*) as count FROM commands WHERE author_id = ? AND used > (CURRENT_TIMESTAMP - INTERVAL 1 WEEK) GROUP BY command ORDER BY count DESC LIMIT 5;", [user.id]);
     let top5_weekly = [];
     await weekly5.forEach(function (value, i) {
-        if (value) {
+        if (weekly5) {
             command = `${lookup[i]}: ${value.command} (${value.count} uses)`    
         } else {
             command = 'None'
@@ -98,7 +98,7 @@ async function show_user_stats(message) {
     const [daily5] = await connection.execute("SELECT command, COUNT(*) as count FROM commands WHERE author_id = ? AND used > (CURRENT_TIMESTAMP - INTERVAL 1 DAY) GROUP BY command ORDER BY count DESC LIMIT 5;", [user.id]);
     let top5_daily = [];
     await daily5.forEach(function (value, i) {
-        if (value) {
+        if (daily5) {
             command = `${lookup[i]}: ${value.command} (${value.count} uses)`    
         } else {
             command = 'None'
