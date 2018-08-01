@@ -2,7 +2,7 @@ const auto_track        = require('../custom_modules/current-track.js');
 const main              = require('../main.js');
 const settings          = main.settings;
 const webhook           = main.webhook;
-//const streamJPOP        = 'async:https://listen.moe/opus';
+const ListenMoe         = require('../custom_modules/listen-moe.js');
 const streamOptions     = {
     highWaterMark: 1, 
     type: 'ogg/opus', 
@@ -10,56 +10,34 @@ const streamOptions     = {
     bitrate: 'auto'
 }
 
-
-//const moe               = main.moe;
-//const feeder            = main.feeder;
-//const humble_bundle     = require('../custom_modules/humble-bundle.js');
-//const Discord           = require('discord.js');
-
 exports.run = (client) => {
 
-    playRadio(client);
-    function playRadio(client) {
+    let ListenMoeBroadcast = null;
+    playBroadcast(client);
+
+    function playBroadcast(client) {
         const broadcast = client.createVoiceBroadcast();
-        broadcast.playStream('async:https://listen.moe/opus', streamOptions);
-    
-        const listen_moe = require('../custom_modules/listen-moe.js');
-        listen_moe.autoRadio(broadcast);
-    
+        broadcast.playStream('async:https://listen.moe/kpop/stream', streamOptions);
+
         broadcast.on('error', (error) => {
             webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Error:** ${error}`);
-            playRadio(client);
+            playBroadcast(client);
         });
     
         broadcast.on('end', () => { 
             webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Broadcast was stopped..**`);
-            playRadio(client);
+            playBroadcast(client);
         });
+
+        ListenMoeBroadcast = new ListenMoe(client, broadcast);
     }
 
-
-    //moe.on('updateTrack', (current_track) => {
-    //    channel = client.channels.get('458310090454466562');
-    //    auto_track(client, channel, current_track);
-    //});
-
-    //feeder.on('new-item', (item) => {
-    //    console.log('There was an Humble Blog posted.')
-    //    if (item.categories.includes('humble free game') && !item.categories.includes('humble monthly')) {
-    //        console.log('And this time it was one that we wanna sent around!')
-    //        channel = client.channels.get('401377602842918920');
-    //        owner = client.users.get('139191103625625600');
-    //        const KawaaiiEmbed = new Discord.RichEmbed()
-    //            .setColor(16670894)
-    //            .setThumbnail(`${client.user.avatarURL}`)
-    //            .setTitle(`New free game available on Humble Bundle! ❤`)
-    //            .setURL(`https://www.humblebundle.com/`)
-    //            .setDescription(`Be fast, there is a new free game available on Humble Bundle.\nAlso make sure to share this with everyone you know!\nThis message was automaticly sent by ${client.user}`)
-    //
-    //        channel.send({ embed: KawaaiiEmbed });
-    //        channel.send(`${owner}`);
-    //    }
-    //});
+    let joined_channels = 0;
+    for (let item of settings.get_channels('radio')) {
+        ListenMoeBroadcast.joinChannel(item);
+        joined_channels = joined_channels + 1;
+    };
+    webhook.send(`Started broadcasting in **${joined_channels}** configured voice-channels.`)
 
     const { status } = require('../data/constants.js');
     function sleep(ms) {return new Promise(resolve => setTimeout(resolve, ms));}
@@ -84,3 +62,26 @@ exports.run = (client) => {
     activity();
 
 }
+
+//const moe               = main.moe;
+//const feeder            = main.feeder;
+//const humble_bundle     = require('../custom_modules/humble-bundle.js');
+//const Discord           = require('discord.js');
+
+    //feeder.on('new-item', (item) => {
+    //    console.log('There was an Humble Blog posted.')
+    //    if (item.categories.includes('humble free game') && !item.categories.includes('humble monthly')) {
+    //        console.log('And this time it was one that we wanna sent around!')
+    //        channel = client.channels.get('401377602842918920');
+    //        owner = client.users.get('139191103625625600');
+    //        const KawaaiiEmbed = new Discord.RichEmbed()
+    //            .setColor(16670894)
+    //            .setThumbnail(`${client.user.avatarURL}`)
+    //            .setTitle(`New free game available on Humble Bundle! ❤`)
+    //            .setURL(`https://www.humblebundle.com/`)
+    //            .setDescription(`Be fast, there is a new free game available on Humble Bundle.\nAlso make sure to share this with everyone you know!\nThis message was automaticly sent by ${client.user}`)
+    //
+    //        channel.send({ embed: KawaaiiEmbed });
+    //        channel.send(`${owner}`);
+    //    }
+    //});
