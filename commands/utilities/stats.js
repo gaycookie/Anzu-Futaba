@@ -64,47 +64,43 @@ async function show_user_stats(message) {
     
     const [total5] = await connection.execute("SELECT command, COUNT(*) as count FROM commands WHERE author_id = ? GROUP BY command ORDER BY count DESC LIMIT 5;", [user.id]);
     let top5_total = [];
-    await total5.forEach(function (value, i) {
-        if (total5) {
-            command = `${lookup[i]}: ${value.command} (${value.count} uses)`    
-        } else {
-            command = 'None'
-        }
-        top5_total.push(command)
-    });
+    if (total5[0]) {
+        await total5.forEach(function (value, i) {
+            top5_total.push(`${lookup[i]}: ${value.command} (${value.count} uses)`)
+        })
+    } else {
+        top5_total.push('None')
+    };
 
     const [monthly5] = await connection.execute("SELECT command, COUNT(*) as count FROM commands WHERE author_id = ? AND used > (CURRENT_TIMESTAMP - INTERVAL 1 MONTH) GROUP BY command ORDER BY count DESC LIMIT 5;", [user.id]);
     let top5_monthly = [];
-    await monthly5.forEach(function (value, i) {
-        if (monthly5) {
-            command = `${lookup[i]}: ${value.command} (${value.count} uses)`    
-        } else {
-            command = 'None'
-        }
-        top5_monthly.push(command)
-    });
+    if (monthly5[0]) {
+        await monthly5.forEach(function (value, i) {
+            top5_monthly.push(`${lookup[i]}: ${value.command} (${value.count} uses)`)
+        })
+    } else {
+        top5_monthly.push('None')
+    };
 
     const [weekly5] = await connection.execute("SELECT command, COUNT(*) as count FROM commands WHERE author_id = ? AND used > (CURRENT_TIMESTAMP - INTERVAL 1 WEEK) GROUP BY command ORDER BY count DESC LIMIT 5;", [user.id]);
     let top5_weekly = [];
-    await weekly5.forEach(function (value, i) {
-        if (weekly5) {
-            command = `${lookup[i]}: ${value.command} (${value.count} uses)`    
-        } else {
-            command = 'None'
-        }
-        top5_weekly.push(command)
-    });
+    if (weekly5[0]) {
+        await weekly5.forEach(function (value, i) {
+            top5_weekly.push(`${lookup[i]}: ${value.command} (${value.count} uses)`)
+        })
+    } else {
+        top5_weekly.push('None')
+    };
 
     const [daily5] = await connection.execute("SELECT command, COUNT(*) as count FROM commands WHERE author_id = ? AND used > (CURRENT_TIMESTAMP - INTERVAL 1 DAY) GROUP BY command ORDER BY count DESC LIMIT 5;", [user.id]);
     let top5_daily = [];
-    await daily5.forEach(function (value, i) {
-        if (daily5) {
-            command = `${lookup[i]}: ${value.command} (${value.count} uses)`    
-        } else {
-            command = 'None'
-        }
-        top5_daily.push(command)
-    });
+    if (daily5[0]) {
+        await daily5.forEach(function (value, i) {
+            top5_daily.push(`${lookup[i]}: ${value.command} (${value.count} uses)`)
+        })
+    } else {
+        top5_daily.push('None')
+    };
 
     const exampleEmbed = new Discord.RichEmbed()
         .setColor(16670894)
