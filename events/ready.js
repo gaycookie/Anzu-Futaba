@@ -20,13 +20,13 @@ exports.run = (client) => {
         broadcast.playStream('async:https://listen.moe/kpop/stream', streamOptions);
 
         broadcast.on('error', (error) => {
-            webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Error:** ${error}`);
             playBroadcast(client);
+            webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Error:** ${error}`);
         });
     
         broadcast.on('end', () => { 
-            webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Broadcast was stopped..**`);
             playBroadcast(client);
+            webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Broadcast was stopped..**`);
         });
 
         ListenMoeBroadcast = new ListenMoe(client, broadcast);
