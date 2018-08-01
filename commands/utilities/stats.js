@@ -65,25 +65,45 @@ async function show_user_stats(message) {
     const [total5] = await connection.execute("SELECT command, COUNT(*) as count FROM commands WHERE author_id = ? GROUP BY command ORDER BY count DESC LIMIT 5;", [user.id]);
     let top5_total = [];
     await total5.forEach(function (value, i) {
-        top5_total.push(`${lookup[i]}: ${value.command} (${value.count} uses)`)
+        if (value) {
+            command = `${lookup[i]}: ${value.command} (${value.count} uses)`    
+        } else {
+            command = 'None'
+        }
+        top5_total.push(command)
     });
 
     const [monthly5] = await connection.execute("SELECT command, COUNT(*) as count FROM commands WHERE author_id = ? AND used > (CURRENT_TIMESTAMP - INTERVAL 1 MONTH) GROUP BY command ORDER BY count DESC LIMIT 5;", [user.id]);
     let top5_monthly = [];
     await monthly5.forEach(function (value, i) {
-        top5_monthly.push(`${lookup[i]}: ${value.command} (${value.count} uses)`)
+        if (value) {
+            command = `${lookup[i]}: ${value.command} (${value.count} uses)`    
+        } else {
+            command = 'None'
+        }
+        top5_monthly.push(command)
     });
 
     const [weekly5] = await connection.execute("SELECT command, COUNT(*) as count FROM commands WHERE author_id = ? AND used > (CURRENT_TIMESTAMP - INTERVAL 1 WEEK) GROUP BY command ORDER BY count DESC LIMIT 5;", [user.id]);
     let top5_weekly = [];
     await weekly5.forEach(function (value, i) {
-        top5_weekly.push(`${lookup[i]}: ${value.command} (${value.count} uses)`)
+        if (value) {
+            command = `${lookup[i]}: ${value.command} (${value.count} uses)`    
+        } else {
+            command = 'None'
+        }
+        top5_weekly.push(command)
     });
 
     const [daily5] = await connection.execute("SELECT command, COUNT(*) as count FROM commands WHERE author_id = ? AND used > (CURRENT_TIMESTAMP - INTERVAL 1 DAY) GROUP BY command ORDER BY count DESC LIMIT 5;", [user.id]);
     let top5_daily = [];
     await daily5.forEach(function (value, i) {
-        top5_daily.push(`${lookup[i]}: ${value.command} (${value.count} uses)`)
+        if (value) {
+            command = `${lookup[i]}: ${value.command} (${value.count} uses)`    
+        } else {
+            command = 'None'
+        }
+        top5_daily.push(command)
     });
 
     const exampleEmbed = new Discord.RichEmbed()
