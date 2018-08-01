@@ -3,7 +3,12 @@ const main              = require('../main.js');
 const settings          = main.settings;
 const webhook           = main.webhook;
 //const streamJPOP        = 'async:https://listen.moe/opus';
-//const streamOptions     = { passes: 10, bitrate: 'auto' }
+const streamOptions     = {
+    highWaterMark: 1, 
+    type: 'ogg/opus', 
+    passes: 3, 
+    bitrate: 'auto'
+}
 
 
 //const moe               = main.moe;
@@ -16,7 +21,7 @@ exports.run = (client) => {
     playRadio(client);
     function playRadio(client) {
         const broadcast = client.createVoiceBroadcast();
-        broadcast.playStream('async:https://listen.moe/opus', {type: 'audio/ogg', passes: 3, bitrate: 'auto'});
+        broadcast.playStream('async:https://listen.moe/opus', streamOptions);
     
         const listen_moe = require('../custom_modules/listen-moe.js');
         listen_moe.autoRadio(broadcast);
