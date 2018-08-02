@@ -4,9 +4,7 @@ const settings          = main.settings;
 const webhook           = main.webhook;
 const ListenMoe         = require('../custom_modules/listen-moe.js');
 const streamOptions     = {
-    highWaterMark: 1, 
-    type: 'ogg/opus', 
-    passes: 3, 
+    passes: 5,
     bitrate: 'auto'
 }
 
@@ -17,17 +15,15 @@ exports.run = (client) => {
 
     function playBroadcast(client) {
         const broadcast = client.createVoiceBroadcast();
-        broadcast.playStream('async:https://listen.moe/kpop/stream', streamOptions);
-
-        broadcast.on('error', (error) => {
-            playBroadcast(client);
-            webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Error:** ${error}`);
-        });
-    
-        broadcast.on('end', (reason) => { 
-            playBroadcast(client);
-            webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Broadcast was stopped..**\n${reason}`);
-        });
+        broadcast.playStream('async:https://listen.moe/kpop/stream', streamOptions)
+            .on('error', (error) => {
+                playBroadcast(client);
+                webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Error:** ${error}`);
+            })
+            .on('end', () => { 
+                playBroadcast(client);
+                webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Broadcast was stopped..**`);
+            });
 
         ListenMoeBroadcast = new ListenMoe(client, broadcast);
     }
