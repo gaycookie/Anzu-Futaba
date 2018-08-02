@@ -24,9 +24,9 @@ exports.run = (client) => {
             webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Error:** ${error}`);
         });
     
-        broadcast.on('end', () => { 
+        broadcast.on('end', (reason) => { 
             playBroadcast(client);
-            webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Broadcast was stopped..**`);
+            webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Broadcast was stopped..**\n${reason}`);
         });
 
         ListenMoeBroadcast = new ListenMoe(client, broadcast);
