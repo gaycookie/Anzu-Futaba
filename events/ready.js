@@ -8,26 +8,26 @@ const streamOptions     = {
     type: 'ogg/opus'
 }
 
-let broadcastJPOP;
+//let broadcastJPOP;
 let broadcastKPOP;
 
 exports.run = (client) => {
 
     createBroadcast(client);
     function createBroadcast(client) {
-        broadcastJPOP = client.createVoiceBroadcast();
+        //broadcastJPOP = client.createVoiceBroadcast();
         broadcastKPOP = client.createVoiceBroadcast();
         
-        broadcastJPOP.playStream('https://listen.moe/opus', streamOptions)
+        //broadcastJPOP.playStream('https://listen.moe/opus', streamOptions)
         broadcastKPOP.playStream('https://listen.moe/kpop/stream', streamOptions)
 
-        broadcastJPOP.on('end', () => {
-            webhook.send(`${client.users.get('139191103625625600')} | **Listen.moe JPOP** broadcast was ended, reloading it now...`);
-            createBroadcast(client);
-        })
+        //broadcastJPOP.on('end', () => {
+        //    webhook.send(`${client.users.get('139191103625625600')} | **Listen.moe JPOP** broadcast was ended, reloading it now...`);
+        //    createBroadcast(client);
+        //})
 
         broadcastKPOP.on('end', () => {
-            webhook.send(`${client.users.get('139191103625625600')} | **Listen.moe JPOP** broadcast was ended, reloading it now...`);
+            webhook.send(`${client.users.get('139191103625625600')} | **Listen.moe KPOP** broadcast was ended, reloading it now...`);
             createBroadcast(client);
         })
     }
@@ -43,14 +43,12 @@ exports.run = (client) => {
         };
     }
 
-    if (broadcastJPOP && broadcastKPOP) {
-        let joined_channels = 0;
-        for (let item of settings.get_channels('radio')) {
-            joinChannel(item);
-            joined_channels = joined_channels + 1;
-        };
-        webhook.send(`Started broadcasting in **${joined_channels}** configured voice-channels.`)
-    }
+    let joined_channels = 0;
+    for (let item of settings.get_channels('radio')) {
+        joinChannel(item);
+        joined_channels = joined_channels + 1;
+    };
+    webhook.send(`Started broadcasting in **${joined_channels}** configured voice-channels.`)
 
     const { status } = require('../data/constants.js');
     function sleep(ms) {return new Promise(resolve => setTimeout(resolve, ms));}
