@@ -88,6 +88,7 @@ async function show_about(message) {
     total_channels = `Total Categories: **${await get_all_categories()}**\nTotal Text-channels: **${await get_all_text_channels()}**\nTotal Voice-channels: **${await get_all_voice_channels()}**`;
     commands_stats = `Total Uses: **${total_used[0]['uses']}**\nMost Used: **${most_used[0]['command']}**`
     global_information = `Node.js version: **${process.version}**\ndiscord.js version: **v${Discord.version}**`
+    documentation = `Official Website: **[kawaaii.moe/anzu](https://www.kawaaii.moe/anzu/)**\nOfficial GitHub: **[github.com/kawaaii](https://github.com/kawaaii/Anzu-Futaba/)**\nOfficial Trello: **[trello.com/b/mOyDjbmI](https://trello.com/b/mOyDjbmI/anzu-futaba)**\nOfficial Feathub: **[feathub.com/kawaaii](https://feathub.com/kawaaii/Anzu-Futaba)**`
 
     const exampleEmbed = new Discord.RichEmbed()
         .setColor(16670894)
@@ -99,6 +100,8 @@ async function show_about(message) {
         .addField('Channels in all guilds', total_channels, true)
         .addField('Global command stats', commands_stats, true)
         .addField('Global Information', global_information, true)
+        .addField('Information/Documentations', documentation, true)
+        .setFooter(`Active Guild Count: ${client.guilds.size}`, bot.avatarURL)
     await message.channel.send({ embed: exampleEmbed });
 }
 
