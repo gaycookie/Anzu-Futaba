@@ -1,39 +1,56 @@
 const auto_track        = require('../custom_modules/current-track.js');
 const main              = require('../main.js');
+const fs                = require('fs');
+const request           = require('request')
 const settings          = main.settings;
 const webhook           = main.webhook;
-const ListenMoe         = require('../custom_modules/listen-moe.js');
 const streamOptions     = {
-    passes: 5,
-    bitrate: 'auto'
+    type: 'ogg/opus'
 }
+
+let broadcastJPOP;
+let broadcastKPOP;
 
 exports.run = (client) => {
 
-    let ListenMoeBroadcast = null;
-    playBroadcast(client);
+    createBroadcast(client);
+    function createBroadcast(client) {
+        broadcastJPOP = client.createVoiceBroadcast();
+        broadcastKPOP = client.createVoiceBroadcast();
+        
+        broadcastJPOP.playStream('https://listen.moe/opus', streamOptions)
+        broadcastKPOP.playStream('https://listen.moe/kpop/stream', streamOptions)
 
-    function playBroadcast(client) {
-        const broadcast = client.createVoiceBroadcast();
-        broadcast.playStream('async:https://listen.moe/kpop/stream', streamOptions)
-            .on('error', (error) => {
-                playBroadcast(client);
-                webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Error:** ${error}`);
-            })
-            .on('end', () => { 
-                playBroadcast(client);
-                webhook.send(`${client.users.get('139191103625625600')} | Something went wrong with the Listen.moe broadcast!\n**Broadcast was stopped..**`);
-            });
+        broadcastJPOP.on('end', () => {
+            webhook.send(`${client.users.get('139191103625625600')} | **Listen.moe JPOP** broadcast was ended, reloading it now...`);
+            createBroadcast(client);
+        })
 
-        ListenMoeBroadcast = new ListenMoe(client, broadcast);
+        broadcastKPOP.on('end', () => {
+            webhook.send(`${client.users.get('139191103625625600')} | **Listen.moe JPOP** broadcast was ended, reloading it now...`);
+            createBroadcast(client);
+        })
     }
 
-    let joined_channels = 0;
-    for (let item of settings.get_channels('radio')) {
-        ListenMoeBroadcast.joinChannel(item);
-        joined_channels = joined_channels + 1;
-    };
-    webhook.send(`Started broadcasting in **${joined_channels}** configured voice-channels.`)
+    async function joinChannel(channel) {
+        const radio_channel = client.channels.get(channel)
+        if (radio_channel.type == 'voice' && radio_channel.speakable) {
+            const connection = await radio_channel.join();
+            await connection.playBroadcast(broadcastKPOP)
+                .on('error', (err) => {
+                    webhook.send(`Something went wrong ${this.client.users.get('139191103625625600')}!\n${err}`)
+                });
+        };
+    }
+
+    if (broadcastJPOP && broadcastKPOP) {
+        let joined_channels = 0;
+        for (let item of settings.get_channels('radio')) {
+            joinChannel(item);
+            joined_channels = joined_channels + 1;
+        };
+        webhook.send(`Started broadcasting in **${joined_channels}** configured voice-channels.`)
+    }
 
     const { status } = require('../data/constants.js');
     function sleep(ms) {return new Promise(resolve => setTimeout(resolve, ms));}
