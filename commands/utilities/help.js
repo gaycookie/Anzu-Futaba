@@ -28,13 +28,18 @@ module.exports = {
             
             const command = commands.get(args[0]);
             
+            let usage = [];
+            for (let item in command.usage) {
+                usage.push(`${settings.get(message, 'prefix')}${command.name} **${command.usage[item]}**`);
+            }
+
             const embed = new Discord.RichEmbed()
                 embed.setColor(16670894)
-                embed.setTitle(`${command.name}`) 
+                embed.setTitle(`${settings.get(message, 'prefix')}${command.name} | command`) 
                 embed.setDescription(`${command.description}`)
                 embed.setThumbnail(`${message.client.user.avatarURL}`)
                 if (command.aliases) embed.addField('Command Aliases: ', `${command.aliases.join(', ')}`, false)
-                if (command.usage) embed.addField('Command Usage: ', `${settings.get(message, 'prefix')}${command.name} ${command.usage}`, false)
+                if (command.usage) embed.addField('Command Usage: ', usage.join('\n'), false)
                 if (command.permissions) embed.addField('Required Permissions: ', `${command.permissions}`, false)
                 if (command.cooldown) embed.addField('Command Cooldown: ', `${command.cooldown}`, false)
             return message.channel.send({embed: embed})
