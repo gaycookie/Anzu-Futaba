@@ -1,8 +1,6 @@
-const Discord  = require('discord.js');
-const ytdl     = require('ytdl-core');
-const {google} = require('googleapis');
-const OAuth2   = google.auth.OAuth2;
-const youtube  = google.youtube('v3');
+const Discord       = require('discord.js');
+const ytdl          = require('ytdl-core');
+const { getInfo }   = require('ytdl-getinfo')
 
 const utils    = require('../custom_modules/utils');
 const config   = require('../data/config.json');
@@ -134,19 +132,41 @@ class MusicModule {
             })
     };
 
-    async play(message, url) {
+    async searchSong(query) {
+        let song;
+        await getInfo(query).then(async (info) => {
+            song = await {
+                "song_name": info['items'][0]['fulltitle'],
+                "song_url": info['items'][0]['webpage_url'],
+                "song_duration": utils.prettifyDuration(info['items'][0]['duration'])
+            }
+        });
+        return song;
+    }
+
+    async play(message, args) {
         await this.getConnection(message, message.member.voiceChannel)
-        
-        if (!url) {
-            if (this.queues[message.guild.id]) {
-                return await this.playMusic(message, this.queues[message.guild.id][0]["song_url"]);
-            };
-            return;
+        await args.shift()
+        let argument = await args.join(' ');
+
+        if (this.playing[message.guild.id]) {
+            if (!argument) {return;};
+            if (!argument.includes('http://') && !argument.includes('https://')) {
+                this.searchSong(argument).then(async (song) => {
+                    return await this.makeQueueEntry(message, song.song_url);
+                })
+            } else {
+                return await this.makeQueueEntry(message, argument);
+            }
         } else {
-            if (this.playing[message.guild.id]) {
-                return await this.makeQueueEntry(message, url);
-            };
-            return await this.playMusic(message, url);
+            if (!argument) {return;};
+            if (!argument.includes('http://') && !argument.includes('https://')) {
+                this.searchSong(argument).then(async (song) => {
+                    return await this.playMusic(message, song.song_url);
+                })
+            } else {
+                return await this.playMusic(message, argument);
+            }
         }
     }
 
@@ -167,6 +187,19 @@ class MusicModule {
     }    
 
     queuePlaylist(message, playlist, page_token) {
+
+        const url = require('url');
+        const url_parts = url.parse(argument, true);
+        const query = url_parts.query;
+        console.log(query)
+
+        if (query.list) {
+            console.log(query.list)
+        }
+        if (query.playlist) {
+            console.log(query.playlist)
+        }
+
         if (!this.connection[message.guild.id]) {
             this.getConnection(message, message.member.voiceChannel)
         };

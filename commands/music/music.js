@@ -18,7 +18,7 @@ module.exports = {
         }
 
         if (args[0] == 'play') {
-            musicModule.play(message, args[1]);
+            musicModule.play(message, args);
         }
 
         if (args[0] == 'leave') {
