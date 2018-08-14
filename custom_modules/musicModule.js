@@ -104,7 +104,7 @@ class MusicModule {
             embed.addField(`Song Duration`, this.playing[message.guild.id]["song_duration"], true)
             embed.addField(`Requested by`, message.client.users.get(this.playing[message.guild.id]["requester"]), true)
 
-            embed.setFooter(`Songs in Queue: ${this.getQueue(message).length}`, `https://kawaaii.moe/images/discord/Anzu/AnzuDJ.png`)
+            embed.setFooter(`Songs in Queue: ${this.queues[message.guild.id].length}`, `https://kawaaii.moe/images/discord/Anzu/AnzuDJ.png`)
             embed.setThumbnail(`https://kawaaii.moe/images/discord/Anzu/AnzuDJ.png`)
         return await message.channel.send({embed: embed})
     }
@@ -124,8 +124,6 @@ class MusicModule {
                     "song_duration": utils.prettifyDuration(song['length_seconds'])
                 }
                 await this.queues[message.guild.id].push(queueEntry);
-                message.channel.send(`Successfully queued: **${queueEntry.song_name}** (${queueEntry.song_duration})`)
-                try { message.delete(); } catch (e) { };
             })
             .catch((e) => {
                 console.log(e)
@@ -145,27 +143,38 @@ class MusicModule {
     }
 
     async play(message, args) {
+        await this.getQueue(message);
         await this.getConnection(message, message.member.voiceChannel)
         await args.shift()
         let argument = await args.join(' ');
 
         if (this.playing[message.guild.id]) {
-            if (!argument) {return;};
+            if (!argument) { return; };
             if (!argument.includes('http://') && !argument.includes('https://')) {
+                let search_message = await message.channel.send(`⏳ | **Searching...**`);
+                try { message.delete(); } catch (e) { };
                 this.searchSong(argument).then(async (song) => {
-                    return await this.makeQueueEntry(message, song.song_url);
+                    search_message.edit(`🎵 | Found a song: **${song.song_name}**, queued it now!`)
+                    await this.makeQueueEntry(message, song.song_url);
+                    setTimeout(async () => { search_message.delete(); }, parseInt(20000));
                 })
             } else {
-                return await this.makeQueueEntry(message, argument);
+                await this.makeQueueEntry(message, argument);
+                try { message.delete(); } catch (e) { };
             }
         } else {
-            if (!argument) {return;};
+            if (!argument) { return; };
             if (!argument.includes('http://') && !argument.includes('https://')) {
+                let search_message = await message.channel.send(`⏳ | **Searching...**`);
+                try { message.delete(); } catch (e) { };
                 this.searchSong(argument).then(async (song) => {
-                    return await this.playMusic(message, song.song_url);
+                    search_message.edit(`🎵 | Found a song: **${song.song_name}**, playing  it now!`)
+                    await this.playMusic(message, song.song_url);
+                    setTimeout(async () => { search_message.delete(); }, parseInt(20000));
                 })
             } else {
-                return await this.playMusic(message, argument);
+                await this.playMusic(message, argument);
+                try { message.delete(); } catch (e) { };
             }
         }
     }
@@ -175,12 +184,14 @@ class MusicModule {
         const stream = await ytdl(url, { quality: "highestaudio", filter : 'audioonly' });
         const dispatcher = await connection.playStream(stream, music_settings.stream_options);
         await this.addPlaying(message, url);
+        this.getPlaying(message);
 
         dispatcher.on('end', async () => {
             if (this.queues[message.guild.id].length) {
                 await this.playMusic(message, this.queues[message.guild.id][0]["song_url"]);
                 await this.queues[message.guild.id].splice(0,1);
             } else {
+                await message.channel.send(`Music has stopped, disonnecting from **${this.connection[message.guild.id].channel.name}**`)
                 await this.stopConnection(message);
             }
         });
@@ -195,9 +206,6 @@ class MusicModule {
 
         if (query.list) {
             console.log(query.list)
-        }
-        if (query.playlist) {
-            console.log(query.playlist)
         }
 
         if (!this.connection[message.guild.id]) {

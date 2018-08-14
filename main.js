@@ -1,13 +1,12 @@
 const fs                        = require('fs');
 const Discord                   = require('discord.js');
 const RssFeedEmitter            = require('rss-feed-emitter');
-const ListenMoeJS               = require('listenmoe.js');
 const config                    = require('./data/config.json');
 const disabled                  = require('./data/disabled.json');
 const connection                = require('./dbPromised.js');
 const experience_function       = require('./custom_modules/experience.js');
 const currency_function         = require('./custom_modules/currency.js');
-const { hearts, sad, status }   = require('./data/constants.js');
+const { hearts, sad }           = require('./data/constants.js');
 const GuildSettings             = require('./guildSettings.js');
 const reactionRecently          = new Set();
 
@@ -22,18 +21,16 @@ feeder.add({
     url: 'http://blog.humblebundle.com/rss',
     refresh: 2000
 });
-const moeKPOP                   = new ListenMoeJS('kpop');
-const moeJPOP                   = new ListenMoeJS('jpop');
-const connectMoeKPOP            = moeKPOP.connect();
-const connectMoeJPOP            = moeJPOP.connect();
-module.exports.moeKPOP          = moeKPOP;
-module.exports.moeJPOP          = moeJPOP;
 module.exports.feeder           = feeder;
 module.exports.settings         = settings;
 module.exports.client           = client;
 module.exports.webhook          = webhook;
 
 // ------------------------------------------------------------------------------------//
+
+async function push_error(error) {
+    webhook.send(`**A global error has occurred**\n\`\`\`js\n${error}\`\`\``)
+};
 
 fs.readdir("./events/", (err, files) => {
     if (err) return console.error(err);
@@ -67,23 +64,19 @@ async function register_command(message, command) {
     };
 }
 
-moeKPOP.on('error', error => {
-    console.log("Something went wrong with 'listenmoe.js' module.");
-    console.log(error);
-    return connectMoe;
-})
-
-moeJPOP.on('error', error => {
-    console.log("Something went wrong with 'listenmoe.js' module.");
-    console.log(error);
-    return connectMoe;
-})
-
 client.on('message', message => {
 
     if (!message.author.bot && message.channel.type == 'text') {
-        experience_function(message);
-        currency_function(message);
+        experience_function(message)
+            .catch((err) => {
+                if (err.message.includes('read ECONNRESET')) { return console.log(err.message) };
+                push_error(err.stack);
+            });
+        currency_function(message)
+            .catch((err) => {
+                if (err.message.includes('read ECONNRESET')) { return console.log(err.message) };
+                push_error(err.stack);
+            });
     }
 
     if (!message.guild.me.permissionsIn(message.channel).has('SEND_MESSAGES')) {
@@ -203,6 +196,7 @@ client.on('message', message => {
         register_command(message, command);
         command.execute(message, args);
     } catch (error) {
+        webhook.send(`**A global error has occurred**\n\`\`\`js\n${error.stack}\`\`\``)
         console.error(error);
         message.reply('there was an error trying to execute that command!');
     }
