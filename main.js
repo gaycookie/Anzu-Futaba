@@ -68,15 +68,7 @@ client.on('message', message => {
 
     if (!message.author.bot && message.channel.type == 'text') {
         experience_function(message)
-            .catch((err) => {
-                if (err.message.includes('read ECONNRESET')) { return console.log(err.message) };
-                push_error(err.stack);
-            });
         currency_function(message)
-            .catch((err) => {
-                if (err.message.includes('read ECONNRESET')) { return console.log(err.message) };
-                push_error(err.stack);
-            });
     }
 
     if (!message.guild.me.permissionsIn(message.channel).has('SEND_MESSAGES')) {
