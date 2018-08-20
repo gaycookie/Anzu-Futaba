@@ -21,16 +21,20 @@ feeder.add({
     url: 'http://blog.humblebundle.com/rss',
     refresh: 2000
 });
-module.exports.feeder           = feeder;
-module.exports.settings         = settings;
-module.exports.client           = client;
-module.exports.webhook          = webhook;
-
-// ------------------------------------------------------------------------------------//
 
 async function push_error(error) {
     webhook.send(`**A global error has occurred**\n\`\`\`js\n${error}\`\`\``)
 };
+
+module.exports.feeder           = feeder;
+module.exports.settings         = settings;
+module.exports.client           = client;
+module.exports.webhook          = webhook;
+module.exports.errorEvent       = push_error;
+
+// ------------------------------------------------------------------------------------//
+
+
 
 fs.readdir("./events/", (err, files) => {
     if (err) return console.error(err);

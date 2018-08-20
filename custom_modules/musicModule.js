@@ -1,9 +1,10 @@
-const Discord       = require('discord.js');
-const ytdl          = require('ytdl-core');
-const { getInfo }   = require('ytdl-getinfo')
+const Discord        = require('discord.js');
+const ytdl           = require('ytdl-core');
+const { getInfo }    = require('ytdl-getinfo')
 
-const utils    = require('../custom_modules/utils');
-const config   = require('../data/config.json');
+const { errorEvent } = require('../main');
+const utils          = require('../custom_modules/utils');
+const config         = require('../data/config.json');
 const music_settings = {
     "related_videos": 3,
     "stream_options": { 
@@ -185,6 +186,10 @@ class MusicModule {
         const dispatcher = await connection.playStream(stream, music_settings.stream_options);
         await this.addPlaying(message, url);
         this.getPlaying(message);
+
+        dispatcher.on('error', async (err) => {
+            return errorEvent(err);
+        })
 
         dispatcher.on('end', async () => {
             if (this.queues[message.guild.id].length) {
