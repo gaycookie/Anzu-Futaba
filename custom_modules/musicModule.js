@@ -188,7 +188,7 @@ class MusicModule {
         this.getPlaying(message);
 
         dispatcher.on('error', async (err) => {
-            return errorEvent(err);
+            return console.log(err)
         })
 
         dispatcher.on('end', async () => {

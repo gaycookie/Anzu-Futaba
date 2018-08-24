@@ -34,7 +34,9 @@ module.exports.errorEvent       = push_error;
 
 // ------------------------------------------------------------------------------------//
 
-
+client.on('error', (err) => {
+    console.log(err);
+})
 
 fs.readdir("./events/", (err, files) => {
     if (err) return console.error(err);
